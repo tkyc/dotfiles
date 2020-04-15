@@ -1,11 +1,27 @@
-!! Appearance
+!! Appearance----------------------------------------------------------------------
+
+!! Scrolling
 URxvt.scrollBar:        false
+
 !! Nerd font
 URxvt.font:             xft:Inconsolata\ Nerd\ Font\ Mono:style=Medium:size=12
+
+!! Cursor
 URxvt.cursorBlink:      true
+
+!! Terminal padding
 URxvt.internalBorder:   15
 
-!! Colorscheme
+!! Opacity
+URxvt.transparent:      true
+URxvt.shading:          25
+
+!!---------------------------------------------------------------------------------
+
+
+
+!! Colorscheme---------------------------------------------------------------------
+
 ! special
 *.foreground: #93a1a1
 *.background: #141c21
@@ -42,3 +58,5 @@ URxvt.internalBorder:   15
 ! white
 *.color7: #bfbaac
 *.color15: #fdf6e3
+
+!!---------------------------------------------------------------------------------
