@@ -5,7 +5,7 @@
 # network={
 #    ssid="your_ssid"
 #    psk="ssid_pass"
-#}
+# }
 #
 # Use the following command to scan for networks:
 # sudo iwlist wlan0 scan

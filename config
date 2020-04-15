@@ -1,9 +1,12 @@
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
+# See https://thomashunter.name/i3-configurator/ for setting colours
 
 
 
 #Mod key---------------------------------------------------------------------------
+
 set $mod Mod1
+
 #----------------------------------------------------------------------------------
 
 
@@ -12,7 +15,7 @@ set $mod Mod1
 
 # start/stop a terminal
 bindsym $mod+Return exec urxvt
-bindsym $mod+x exec tmux kill-server
+bindsym $mod+x exec tmux kill-session && kill
 
 # start firefox
 bindsym $mod+Shift+f exec firefox
@@ -21,7 +24,7 @@ bindsym $mod+Shift+f exec firefox
 
 
 
-#Window settings-------------------------------------------------------------------
+#Window/Desktop settings-----------------------------------------------------------
 
 #Floating window
 #floating_minimum_size 75 x 50
@@ -31,13 +34,21 @@ bindsym $mod+Shift+f exec firefox
 # is used in the bar {} block below.
 font pango:monospace 8
 
-#Hide window names
-#new_window pixel 0
+#Hide window names (Need to enable for desktop bg to work with feh)
+new_window pixel 0
 
-#Colors
+#Colors -- border, background, text, indicator, child border
 client.background #1b2631
-client.focused #000000 #1b2631 #1b2631
-client.unfocused #000000 #000000 #000000
+client.focused #000000 #1b2631 #1b2631 #1b2631
+client.unfocused #000000 #000000 #000000 #000000
+
+#Set window gaps
+gaps inner 8
+gaps outer 8
+
+#Desktop background -- place image in downloads folder in home directory
+exec --no-startup-id feh --bg-scale ~/Downloads/bg.jpg
+
 
 #----------------------------------------------------------------------------------
 

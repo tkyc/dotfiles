@@ -3,6 +3,7 @@ URxvt.scrollBar:        false
 !! Nerd font
 URxvt.font:             xft:Inconsolata\ Nerd\ Font\ Mono:style=Medium:size=12
 URxvt.cursorBlink:      true
+URxvt.internalBorder:   15
 
 !! Colorscheme
 ! special

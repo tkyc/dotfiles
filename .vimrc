@@ -56,6 +56,7 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'powerline/powerline'
 Plug 'scrooloose/nerdtree'
+"Install fzf and ripgrep for fzf to work in vim
 Plug 'junegunn/fzf.vim'
 Plug 'maxmellon/vim-jsx-pretty'
 Plug 'sheerun/vim-polyglot'
