@@ -1,4 +1,4 @@
-#Personal auto rice setup for i3wm environment
+#Personal auto rice setup for i3wm environment -- always a WIP
 
 1. Setup wifi
     - wireless_tools, dhclient, wpa_supplicant
