@@ -1,4 +1,4 @@
-#Personal auto rice setup for i3wm environment -- always a WIP
+#Personal auto rice for i3wm environment -- always a WIP
 
 1. Setup wifi
     - wireless_tools, dhclient, wpa_supplicant
@@ -6,3 +6,16 @@
 
 2. Setup vim
     - fzf and ripgrep
+
+3. Setup system fonts
+    - /etc/fonts/local.conf
+    - Install some fonts
+        - sudo pacman -S ttf-dejavu ttf-liberation noto-fonts
+        - Get Inconsolata font from AUR for URXVT
+    - Enable font presets
+        - sudo ln -s /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
+        - sudo ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
+        - sudo ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
+    - Uncomment mode at end
+        - vim /etc/profile.d/freetype2.sh
+        - export FREETYPE_PROPERTIES="truetype:interpreter-version=40"
