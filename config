@@ -47,7 +47,7 @@ client.unfocused #000000 #000000 #000000 #000000
 gaps inner 8
 gaps outer 8
 
-#Desktop background -- place image in downloads folder in home directory
+#Desktop background -- place image in downloads folder in home directory and hide window bar
 exec --no-startup-id feh --bg-scale ~/Downloads/bg.jpg
 
 

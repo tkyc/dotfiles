@@ -3,7 +3,7 @@
 # Execute this script in the scripts directory of this repo
 
 # Update scripts
-cp ~/scripts/* .
+cp ~/Scripts/* .
 
 # Update dotfiles
 cp ~/.bash_profile ../
