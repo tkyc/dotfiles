@@ -55,6 +55,10 @@ exec --no-startup-id xset s off
 exec --no-startup-id xset -dpms
 exec --no-startup-id xset s noblank
 
+#Get current battery percentage and display in status bar
+#Script runs every 10m and you must place battery script in "Scripts" folder in home directory
+#exec ~/Scripts/battery.sh
+
 #---------------------------------------------------------------------------------
 
 

@@ -1,5 +1,8 @@
 #Personal auto rice for i3wm environment -- always a WIP
 
+Create "Scripts" folder in home directory and place scripts from repo in there
+All scripts are execute only, so edits require permission changes
+
 1. Setup wifi
     - wireless_tools, dhclient, wpa_supplicant
     - set network conf file in /etc/wpa_supplicant.conf
