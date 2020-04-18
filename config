@@ -50,8 +50,12 @@ gaps outer 8
 #Desktop background -- place image in downloads folder in home directory and hide window bar
 exec --no-startup-id feh --bg-scale ~/Downloads/bg.jpg
 
+#Disable screen saver -- screen won't go black after a few minutes
+exec --no-startup-id xset s off
+exec --no-startup-id xset -dpms
+exec --no-startup-id xset s noblank
 
-#----------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------
 
 
 
