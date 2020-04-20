@@ -23,6 +23,20 @@ URxvt.pointerBlank:     true
 
 
 
+!!Keybinds-------------------------------------------------------------------------
+
+!!Copy and pasting -- Disabled ctrl-shift binding
+URxvt.keysym.Shift-Control-V: eval:paste_clipboard
+URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
+URxvt.keysym.Control-Meta-c:  builtin-string:
+URxvt.keysym.Control-Meta-v:  builtin-string:
+URxvt.iso14755:               false
+URxvt.iso14755_52:            false
+
+!!---------------------------------------------------------------------------------
+
+
+
 !! Colorscheme---------------------------------------------------------------------
 
 ! special
