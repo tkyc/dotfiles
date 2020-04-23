@@ -3,18 +3,20 @@
 
 
 
-#Mod key---------------------------------------------------------------------------
+#Mod Key---------------------------------------------------------------------------
 
+#L-Alt key
 set $mod Mod1
 
 #----------------------------------------------------------------------------------
 
 
 
-#Application keybinds--------------------------------------------------------------
+#Application Keybinds--------------------------------------------------------------
 
 # start/stop a terminal
 bindsym $mod+Return exec urxvt
+
 #Explicit session kill to stop tmux session (if terminal is closed without session kill, it can cause memory leak)
 bindsym $mod+x exec tmux kill-session && kill
 
@@ -25,7 +27,7 @@ bindsym $mod+Shift+f exec firefox
 
 
 
-#Window/Desktop settings-----------------------------------------------------------
+#Window/Desktop Settings-----------------------------------------------------------
 
 #Floating window
 #floating_minimum_size 75 x 50
@@ -58,13 +60,11 @@ exec --no-startup-id xset s off
 exec --no-startup-id xset -dpms
 exec --no-startup-id xset s noblank
 
-#Get current battery percentage and display in status bar
-#Script runs every 10m and you must place passive_bat script in "Scripts" folder in home directory
-#exec sh /home/tkyc/Scripts/passive_bat.sh
-
 #---------------------------------------------------------------------------------
 
 
+
+#Environment Keybinds--------------------------------------------------------------
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -79,7 +79,7 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
-exec --no-startup-id nm-applet
+#exec --no-startup-id nm-applet
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -91,7 +91,6 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-
 # kill focused window
 bindsym $mod+Shift+q kill
 
@@ -101,11 +100,6 @@ bindsym $mod+d exec dmenu_run
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
-
-
-
-
-
 
 # change focus
 bindsym $mod+h focus left
@@ -210,6 +204,12 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+#----------------------------------------------------------------------------------
+
+
+
+#i3status/i3blocks Settings--------------------------------------------------------
+
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
@@ -225,7 +225,4 @@ bar {
 #    status_command i3status --config ~/.config/i3status/i3status.conf
 }
 
-#Media keys for brightness
-bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
-bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
-
+#----------------------------------------------------------------------------------

@@ -13,8 +13,8 @@ All scripts are execute only, so edits require permission changes
 3. Setup system fonts
     - /etc/fonts/local.conf
     - Install some fonts
-        - sudo pacman -S ttf-dejavu ttf-liberation noto-fonts
-        - Get Inconsolata font from AUR for URXVT
+        - sudo pacman -S ttf-dejavu ttf-liberation noto-fonts (for web browser)
+        - Get Inconsolata and Noto nerd fonts from AUR for URXVT (nerd-fonts-inconsolata and nerd-fonts-noto)
     - Enable font presets
         - sudo ln -s /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
         - sudo ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
