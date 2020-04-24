@@ -14,13 +14,14 @@ set $mod Mod1
 
 #Application Keybinds/Settings-----------------------------------------------------
 
-# start/stop a terminal
+#Start/stop a terminal
 bindsym $mod+Return exec urxvt
 
 #Explicit session kill to stop tmux session (if terminal is closed without session kill, it can cause memory leak)
+#Kills the most recent created terminal
 bindsym $mod+x exec tmux kill-session && kill
 
-# start firefox
+#Start firefox
 bindsym $mod+Shift+f exec firefox
 
 #----------------------------------------------------------------------------------
@@ -53,7 +54,7 @@ gaps inner 7
 gaps outer 7
 
 #Desktop background -- place image in downloads folder in home directory and hide window bar
-exec --no-startup-id feh --bg-scale ~/Downloads/bg1.jpg
+exec --no-startup-id feh --bg-scale ~/Downloads/bg0.jpg
 
 #Disable screen saver -- screen won't go black after a few minutes
 exec --no-startup-id xset s off
