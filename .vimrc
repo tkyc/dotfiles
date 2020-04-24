@@ -58,7 +58,8 @@ let g:airline#extensions#tabline#tab_nr_type=1
 if !exists('g:airline_symbols')
     let g:airline_symbols={}
 endif
-let g:airline_theme='powerlineish'
+"let g:airline_theme='powerlineish'
+let g:airline_theme='angr'
 let g:airline_symbols.linenr=''
 let g:airline_symbols.maxlinenr=' '
 
