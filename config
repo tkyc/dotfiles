@@ -25,7 +25,7 @@ bindsym $mod+x exec tmux kill-session && kill
 bindsym $mod+Shift+f exec firefox
 
 #Setup tmux panes for project
-bindsym $mod+shift+p exec sh ~/Scripts/panes.sh
+bindsym $mod+shift+p exec sh /home/tkyc/Scripts/panes.sh
 
 #----------------------------------------------------------------------------------
 

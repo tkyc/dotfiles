@@ -1,6 +1,6 @@
 "General settings
 "Uncomment if vim is booting in replace mode
-"set noek
+set noek
 set number
 set relativenumber
 set hlsearch
