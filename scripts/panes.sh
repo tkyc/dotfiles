@@ -1,7 +1,13 @@
 #!/bin/bash
 # Tmux pane setup
 
+# 2 panes
 tmux split-window -v
-tmux split-window -h
-tmux resize-pane -y 9
+tmux resize-pane -y 8
 tmux select-pane -t 0
+
+# 3 panes
+#tmux split-window -v
+#tmux split-window -h
+#tmux resize-pane -y 9
+#tmux select-pane -t 0

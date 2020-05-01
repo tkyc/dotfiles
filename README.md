@@ -22,3 +22,6 @@ All scripts are execute only, so edits require permission changes
     - Uncomment mode at end
         - vim /etc/profile.d/freetype2.sh
         - export FREETYPE_PROPERTIES="truetype:interpreter-version=40"
+
+4. Firefox
+    - Right-click -- ui.context_menus.after_mouseup = true
