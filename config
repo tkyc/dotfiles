@@ -59,10 +59,10 @@ gaps outer 7
 #Desktop background -- place image in downloads folder in home directory and hide window bar
 exec --no-startup-id feh --bg-scale ~/Downloads/bg0.jpg
 
-#Disable screen saver -- screen won't go black after a few minutes
-exec --no-startup-id xset s off
-exec --no-startup-id xset -dpms
-exec --no-startup-id xset s noblank
+#Disable screen saver -- screen won't go black after a few minutes (Currently being disabled through .xinitrc)
+#exec --no-startup-id xset s off
+#exec --no-startup-id xset -dpms
+#exec --no-startup-id xset s noblank
 
 #---------------------------------------------------------------------------------
 
@@ -140,11 +140,11 @@ bindsym $mod+a focus parent
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
 set $ws1 "1 Urxvt|Code "
-set $ws2 "2 Web|Other 爵"
+set $ws2 "2 Web|Misc. 爵"
 set $ws3 "3 Entity- "
 set $ws4 "4 SOLID~ "
 set $ws5 "5 SignalR- "
-set $ws6 "6 Dependency~"
+set $ws6 "6 Dependency~ "
 set $ws7 "7 Sealed- "
 set $ws8 "8 Generic~ "
 set $ws9 "9 Base- "
