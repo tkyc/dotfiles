@@ -11,6 +11,7 @@ cp ~/.bashrc ../
 cp ~/.i3blocks.conf ../
 cp ~/.config/i3/config ../
 cp ~/.config/i3status/i3status.conf ../
+cp ~/.config/gtk-3.0/settings.ini ../
 cp ~/.tmux.conf ../
 cp ~/.vimrc ../
 cp ~/.Xdefaults ../
