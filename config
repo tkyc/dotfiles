@@ -22,10 +22,13 @@ bindsym $mod+Return exec urxvt
 bindsym $mod+x exec tmux kill-session && kill
 
 #Start firefox
-bindsym $mod+Shift+f exec firefox
+bindsym $mod+shift+f exec firefox
 
-#Setup tmux for project
-bindsym $mod+shift+p exec sh ~/Scripts/panes.sh
+#Start mousepad
+bindsym $mod+shift+m exec mousepad
+
+#Setup tmux for project (not working as desired -- second window isn't switching to cwd)
+#bindsym $mod+shift+p exec /home/tkyc/Scripts/panes.sh
 
 #----------------------------------------------------------------------------------
 
@@ -221,7 +224,7 @@ bar {
     colors {
         separator #1b2631 
         background #1b2631
-        focused_workspace #008080 #008080 #cccccc
+        focused_workspace #008080 #008080 #ffffff
     }
 
 	position top

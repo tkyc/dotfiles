@@ -2,6 +2,8 @@
 # ~/.bashrc
 #
 
+export PATH=$PATH:/home/tkyc/Scripts
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 

@@ -4,7 +4,7 @@
 # 2 windows
 tmux rename-window -t 0 "CodeEditor []"
 tmux new-window
-tmux rename-window -t 1 "Shell "
+tmux rename-window -t 1 "Shell "
 tmux select-window -t 0
 
 # 2 panes
