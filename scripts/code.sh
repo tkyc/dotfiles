@@ -6,6 +6,7 @@ tmux rename-window -t 0 "CodeEditor []"
 tmux new-window
 tmux rename-window -t 1 "Shell "
 tmux select-window -t 0
+vim .
 
 # 2 panes
 #tmux split-window -v
