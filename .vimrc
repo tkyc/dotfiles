@@ -47,6 +47,7 @@ noremap <silent><esc> <esc>:noh<CR><esc>
 map <C-h> :nohlsearch <CR>
 inoremap ii <Esc>
 map <C-n> :NERDTreeToggle <CR>
+set pastetoggle=<C-p>
 
 
 
