@@ -2,6 +2,7 @@
 # ~/.bashrc
 #
 
+# Personal shell scripts
 export PATH=$PATH:/home/tkyc/Scripts
 
 # If not running interactively, don't do anything
@@ -24,15 +25,15 @@ fi
 #    fi
 #fi
 
-# Terminal prompt display
+# Terminal prompt display -- configure what is displayed on terminal prompt ex. directory, git branch, etc...
 colour='\033[0;36m'
 no_colour='\033[0m'
 alias ls='ls --color=auto'
 #PS1='[\u@\h \W]\$ '
 
-# Displays the current git branch and displays the terminal prompt
 parse_git_branch() {
-     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
 
-export PS1="[\u@\h \[\e[32m\]\w \[\e[91m\]\$(parse_git_branch)\[\e[00m\] ${colour}${no_colour}] "
+# 
+export PS1="[\u@\h \[\e[32m\]\w\[\e[91m\]\$(parse_git_branch)\[\e[00m\] ${colour}${no_colour}] "
