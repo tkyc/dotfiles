@@ -1,0 +1,36 @@
+{
+
+    "editor.lineNumbers": "relative",
+
+    "editor.renderLineHighlight": "line",
+
+    "vim.insertModeKeyBindings": [
+        {
+            "before": ["i", "i"],
+            "after": ["<Esc>"]
+        }
+    ],
+
+    "vim.statusBarColorControl": true,
+
+    "vim.statusBarColors.visual": "#b55d02",
+
+    "vim.statusBarColors.visualblock": "#a02236",
+
+    "vim.statusBarColors.visualline": "#9C195B",
+
+    "vim.statusBarColors.replace": "#6f1f45",
+
+    "vim.statusBarColors.insert": "#6d8400",
+
+    "vim.statusBarColors.normal": "#007575",
+
+    "workbench.colorCustomizations": {
+        "statusBar.background": "#007575",
+        "statusBar.noFolderBackground": "#007575",
+        "statusBar.debuggingBackground": "#007575"
+    },
+
+    "vim.visualModeKeyBindingsNonRecursive": []
+
+}
