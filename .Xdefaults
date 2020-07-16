@@ -14,7 +14,7 @@ URxvt.internalBorder:   15
 
 !! Opacity
 URxvt.transparent:      true
-URxvt.shading:          60
+URxvt.shading:          25
 
 !! Mouse
 URxvt.pointerBlank:     true
