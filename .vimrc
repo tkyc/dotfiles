@@ -1,6 +1,4 @@
 "General settings
-"Uncomment if vim is booting in replace mode
-set noek
 set number
 set relativenumber
 set hlsearch
@@ -81,16 +79,18 @@ highlight clear SignColumn
 
 "Plugins start --- vim-plug is the plugin manager
 call plug#begin('~/.vim/plugged')
-
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 "Install fzf and ripgrep for fzf to work in vim
 Plug 'junegunn/fzf.vim'
-Plug 'maxmellon/vim-jsx-pretty'
-Plug 'sheerun/vim-polyglot'
+Plug 'junegunn/fzf'
+"Plug 'maxmellon/vim-jsx-pretty'
+"Plug 'sheerun/vim-polyglot'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'airblade/vim-gitgutter'
 Plug 'ryanoasis/vim-devicons'
-
+"https://github.com/nvim-treesitter/nvim-treesitter/issues/700
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'christianchiarulli/nvcode-color-schemes.vim'
 call plug#end()

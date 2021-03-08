@@ -1,0 +1,56 @@
+---
+- name: Configure arch linux development environment
+  hosts: localhost
+  connection: local
+  become: yes
+
+  tasks:
+    - name: Test
+      shell: echo 'export FREETYPE_PROPERTIES="truetype:interpreter-version=40"' > /etc/profile.d/freetype2.sh
+    #- name: Installing system fonts
+    #  shell: |
+    #    yes | pacman -S ttf-dejavu ttf-liberation noto-fonts
+    #    cd /home/{{ ansible_env.SUDO_USER }}/
+    #    git clone https://aur.archlinux.org/nerd-fonts-inconsolata.git
+    #    git clone https://aur.archlinux.org/nerd-fonts-noto.git
+    #    chown {{ ansible_env.SUDO_USER }} nerd-fonts-inconsolata
+    #    chown {{ ansible_env.SUDO_USER }} nerd-fonts-noto
+    #    cd nerd-fonts-inconsolata/
+    #    yes | sudo -u {{ ansible_env.SUDO_USER }} makepkg -sirc
+    #    cd /home/{{ ansible_env.SUDO_USER }}
+    #    rm -rf nerd-fonts-inconsolata/
+    #    cd nerd-fonts-noto/
+    #    yes | sudo -u {{ ansible_env.SUDO_USER }} makepkg -sirc
+    #    cd /home/{{ ansible_env.SUDO_USER }}
+    #    rm -rf nerd-fonts-noto/
+    #    ln -s /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
+    #    ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
+    #    ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
+    #  register: system_fonts_install_shell_output
+    #- debug:
+    #    msg: "{{ system_fonts_install_shell_output }}"
+
+    #- name: Perform system update
+    #  shell: "yes | pacman -Syu"
+    #  register: system_update_shell_output
+    #- debug:
+    #    msg: "{{ system_update_shell_output }}"
+
+    #- name: Install Xorg display server
+    #  shell: "pacman -S --noconfirm xorg"
+    #  register: xorg_install_shell_output
+    #- debug:
+    #    msg: "{{ xorg_install_shell_output }}"
+    #
+    #- name: Install i3wm
+    #  shell: "yes | pacman -S i3-gaps"
+    #  register: i3wm_install_shell_output
+    #- debug:
+    #    msg: "{{ i3wm_install_shell_output }}"
+    #
+    #- name: Enabling i3wm
+    #  copy:
+    #    src: "{{ playbook_dir }}/.xinitrc"
+    #    dest: "/home/{{ ansible_env.SUDO_USER }}/.xinitrc"
+    #- debug:
+    #    msg: "Moving .xinitrc file to /home/{{ ansible_env.SUDO_USER }} directory"
