@@ -14,6 +14,8 @@ else
     if [ ! -z $local_ip ];then
         echo "<span background='#4b846c'><span background='#990099'>  </span> $local_ip </span>"
     else
-        echo "<span background='#4b846c'><span foreground='#990099'>  </span> Disconnected </span>"
+        echo "<span background='#4b846c'><span background='#990099'>  </span> Disconnected </span>"
     fi
 fi
+
+
