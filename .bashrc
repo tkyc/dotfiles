@@ -5,6 +5,9 @@
 # Personal shell scripts
 export PATH=$PATH:/home/tkyc/Scripts
 
+# Autocomplete shell commands after "sudo"
+complete -cf sudo
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 

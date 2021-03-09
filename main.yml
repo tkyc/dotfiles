@@ -5,52 +5,119 @@
   become: yes
 
   tasks:
-    - name: Test
-      shell: echo 'export FREETYPE_PROPERTIES="truetype:interpreter-version=40"' > /etc/profile.d/freetype2.sh
-    #- name: Installing system fonts
-    #  shell: |
-    #    yes | pacman -S ttf-dejavu ttf-liberation noto-fonts
-    #    cd /home/{{ ansible_env.SUDO_USER }}/
-    #    git clone https://aur.archlinux.org/nerd-fonts-inconsolata.git
-    #    git clone https://aur.archlinux.org/nerd-fonts-noto.git
-    #    chown {{ ansible_env.SUDO_USER }} nerd-fonts-inconsolata
-    #    chown {{ ansible_env.SUDO_USER }} nerd-fonts-noto
-    #    cd nerd-fonts-inconsolata/
-    #    yes | sudo -u {{ ansible_env.SUDO_USER }} makepkg -sirc
-    #    cd /home/{{ ansible_env.SUDO_USER }}
-    #    rm -rf nerd-fonts-inconsolata/
-    #    cd nerd-fonts-noto/
-    #    yes | sudo -u {{ ansible_env.SUDO_USER }} makepkg -sirc
-    #    cd /home/{{ ansible_env.SUDO_USER }}
-    #    rm -rf nerd-fonts-noto/
-    #    ln -s /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
-    #    ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
-    #    ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
-    #  register: system_fonts_install_shell_output
-    #- debug:
-    #    msg: "{{ system_fonts_install_shell_output }}"
+      - name: Perform system update
+        shell: "yes | pacman -Syu"
+        register: system_update_shell_output
+      - debug:
+          msg: "{{ system_update_shell_output }}"
 
-    #- name: Perform system update
-    #  shell: "yes | pacman -Syu"
-    #  register: system_update_shell_output
-    #- debug:
-    #    msg: "{{ system_update_shell_output }}"
+      - name: Installing system fonts
+        shell: |
+          yes | pacman -S ttf-dejavu ttf-liberation noto-fonts
+          cd /home/{{ ansible_env.SUDO_USER }}/
+          git clone https://aur.archlinux.org/nerd-fonts-inconsolata.git
+          git clone https://aur.archlinux.org/nerd-fonts-noto.git
+          chown {{ ansible_env.SUDO_USER }} nerd-fonts-inconsolata
+          chown {{ ansible_env.SUDO_USER }} nerd-fonts-noto
+          cd nerd-fonts-inconsolata/
+          yes | sudo -u {{ ansible_env.SUDO_USER }} makepkg -sirc
+          cd /home/{{ ansible_env.SUDO_USER }}
+          rm -rf nerd-fonts-inconsolata/
+          cd nerd-fonts-noto/
+          yes | sudo -u {{ ansible_env.SUDO_USER }} makepkg -sirc
+          cd /home/{{ ansible_env.SUDO_USER }}
+          rm -rf nerd-fonts-noto/
+          ln -s /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
+          ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
+          ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
+          echo 'export FREETYPE_PROPERTIES="truetype:interpreter-version=40"' > /etc/profile.d/freetype2.sh
+        register: system_fonts_install_shell_output
+      - debug:
+          msg: "{{ system_fonts_install_shell_output }}"
 
-    #- name: Install Xorg display server
-    #  shell: "pacman -S --noconfirm xorg"
-    #  register: xorg_install_shell_output
-    #- debug:
-    #    msg: "{{ xorg_install_shell_output }}"
-    #
-    #- name: Install i3wm
-    #  shell: "yes | pacman -S i3-gaps"
-    #  register: i3wm_install_shell_output
-    #- debug:
-    #    msg: "{{ i3wm_install_shell_output }}"
-    #
-    #- name: Enabling i3wm
-    #  copy:
-    #    src: "{{ playbook_dir }}/.xinitrc"
-    #    dest: "/home/{{ ansible_env.SUDO_USER }}/.xinitrc"
-    #- debug:
-    #    msg: "Moving .xinitrc file to /home/{{ ansible_env.SUDO_USER }} directory"
+      - name: Download required packages
+        shell: |
+            yes | pacman -S htop
+            yes | pacman -S alsa-utils
+            yes | pacman -S fzf
+            yes | pacman -S ripgrep
+            yes | pacman -S nodejs
+            yes | pacman -S feh
+            yes | pacman -S i3blocks
+            yes | pacman -S tmux
+            yes | pacman -S rxvt-unicode
+            yes | pacman -S openssh
+            yes | pacman -S firefox
+            yes | pacman -S ttf-dejavu ttf-liberation noto-fonts
+            yes | pacman -S cmake
+            yes | pacman -S unzip zip
+            yes | pacman -S lsof
+            yes | pacman -S tree
+            yes | pacman -S curl
+            cd /home/{{ ansible_env.SUDO_USER }}/
+            curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        register: package_download_shell_output
+      - debug:
+          msg: "{{ package_download_shell_output }}"
+
+      - name: Install neovim
+        shell: |
+            cd /home/{{ ansible_env.SUDO_USER }}
+            git clone https://github.com/neovim/neovim
+            cd neovim/
+            make CMAKE_BUILD_TYPE=Release install
+            chown -R {{ ansible_env.SUDO_USER }}:users .cache/nvim/
+            rm -rf neovim/
+        register: neovim_install_shell_output
+      - debug:
+          msg: "{{ neovim_install_shell_output }}"
+
+      - name: Enabling neovim and terminal
+        shell: |
+            mkdir -p /home/{{ ansible_env.SUDO_USER }}/.vim/colors/
+            mkidr -p /home/{{ ansible_env.SUDO_USER }}/.config/nvim/
+            cd /home/{{ ansible_env.SUDO_USER }}/
+            git clone https://github.com/tkyc/tmux-themepack.git
+        copy: src={{ item.src }} dest={{ item.dest }}
+        with_items:
+            - { src: "{{ playbook_dir }}/.vimrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.vimrc" }
+            - { src: "{{ playbook_dir }}/init.vim", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/nvim/init.vim" }
+            - { src: "{{ playbook_dir }}/profile.vim", dest: "/home/{{ ansible_env.SUDO_USER }}/.vim/colors/profile.vim" }
+            - { src: "{{ playbook_dir }}/.Xdefaults", dest: "/home/{{ ansible_env.SUDO_USER }}/.Xdefaults" }
+            - { src: "{{ playbook_dir }}/.tmux.conf", dest: "/home/{{ ansible_env.SUDO_USER }}/.tmux.conf" }
+            - { src: "{{ playbook_dir }}/.bashrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.bashrc" }
+            - { src: "{{ playbook_dir }}/.bash_profile", dest: "/home/{{ ansible_env.SUDO_USER }}/.bash_profile" }
+      - debug:
+          msg: "Enabling neovim and terminal"
+
+      - name: Enable vim plugins
+        shell: nvim +PlugInstall +qall
+      - debug:
+          msg: "Enabling vim plugins"
+
+      - name: Install Xorg display server
+        shell: "pacman -S --noconfirm xorg"
+        register: xorg_install_shell_output
+      - debug:
+          msg: "{{ xorg_install_shell_output }}"
+      
+      - name: Install i3wm
+        shell: "yes | pacman -S i3-gaps"
+        register: i3wm_install_shell_output
+      - debug:
+          msg: "{{ i3wm_install_shell_output }}"
+      
+      - name: Enabling i3wm
+        shell: |
+            mkdir -p /home/{{ ansible_env.SUDO_USER }}/Scripts/
+            mkidr -p /home/{{ ansible_env.SUDO_USER }}/Folder/backgrounds/
+            mkdir -p /home/{{ ansible_env.SUDO_USER }}/Repos
+        copy: src={{ item.src }} dest={{ item.dest }}
+        with_items:
+            - { src: "{{ playbook_dir }}/.xinitrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.xinitrc" }
+            - { src: "{{ playbook_dir }}/.i3blocks.conf", dest: "/home/{{ ansible_env.SUDO_USER }}/.i3blocks.conf" }
+            - { src: "{{ playbook_dir }}/config", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/i3/config" }
+            - { src: "{{ playbook_dir }}/scripts/*", dest: "/home/{{ ansible_env.SUDO_USER }}/Scripts/" }
+            - { src: "{{ playbook_dir }}/00.jpg", dest: "/home/{{ ansible_env.SUDO_USER }}/Folder/backgrounds/00.jpg" }
+      - debug:
+          msg: "Enabling i3wm"

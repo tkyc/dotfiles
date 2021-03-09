@@ -45,7 +45,8 @@ bindsym $mod+shift+m exec mousepad
 font pango:monospace 8, NotoSansMono Nerd Font 11
 
 #Hide window names and enable window outline (Need to enable for desktop bg to work with feh)
-new_window pixel 1
+#new_window pixel 1
+for_window [class="^.*"] border pixel 1
 
 #Colors                   border,    background,    text,      indicator,    child border
 client.focused            #4b846c    #162127        #162127    #4b846c       #4b846c
@@ -60,7 +61,7 @@ gaps inner 7
 gaps outer 7
 
 #Desktop background -- place image in downloads folder in home directory and hide window bar
-exec --no-startup-id feh --bg-scale ~/Folder/backgrounds/bg4.jpg
+exec --no-startup-id feh --bg-scale ~/Folder/backgrounds/00.jpg
 
 #Disable screen saver -- screen won't go black after a few minutes
 exec --no-startup-id xset s off
@@ -127,6 +128,8 @@ bindsym $mod+f fullscreen toggle
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
+
+#Fibonacci tiling
 
 #Toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
