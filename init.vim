@@ -17,3 +17,5 @@ EOF
 
 "Configure colorscheme
 colorscheme profile
+
+source ~/.config/nvim/coc.vim

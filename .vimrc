@@ -45,15 +45,18 @@ noremap <silent><esc> <esc>:noh<CR><esc>
 map <C-h> :nohlsearch <CR>
 inoremap ii <Esc>
 map <C-n> :NERDTreeToggle <CR>
-set pastetoggle=<C-p>
+"set pastetoggle=<C-p>
 
 
 
 "Vim powerline enable
 set laststatus=2
 set showtabline=2
-let g:airline#extensions#tabline#enabled=1
-let g:airline#extensions#tabline#tab_nr_type=1
+let g:airline#extensions#tabline#enabled=1 "Toggle showing of tab panel, 0 = false 1 = true
+let g:airline#extensions#tabline#tab_nr_type=1 "Configure individual tab display content
+let g:airline#extensions#tabline#tab_min_count = 2 "Minimum number of tabs to appear in tab panel
+let g:airline#extensions#tabline#buffer_min_count = 2 "Minimim number of buffers to appear in tab panel
+ let g:airline#extensions#tabline#show_buffers = 0 "Toggle showing of buffers, 0 = false 1 = true
 if !exists('g:airline_symbols')
     let g:airline_symbols={}
 endif
@@ -77,20 +80,23 @@ highlight clear SignColumn
 
 
 
+"Execute scripts on vim events
+:autocmd VimLeave * !$HOME/Scripts/close-lsp.sh %
+
+
+
 "Plugins start --- vim-plug is the plugin manager
 call plug#begin('~/.vim/plugged')
+"Plug 'maxmellon/vim-jsx-pretty'
+"Plug 'sheerun/vim-polyglot'
+"Plug 'christianchiarulli/nvcode-color-schemes.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
-"Install fzf and ripgrep for fzf to work in vim
-Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf.vim' "Install fzf and ripgrep for fzf to work in vim
 Plug 'junegunn/fzf'
-"Plug 'maxmellon/vim-jsx-pretty'
-"Plug 'sheerun/vim-polyglot'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'airblade/vim-gitgutter'
 Plug 'ryanoasis/vim-devicons'
-"https://github.com/nvim-treesitter/nvim-treesitter/issues/700
-Plug 'nvim-treesitter/nvim-treesitter'
-Plug 'christianchiarulli/nvcode-color-schemes.vim'
+Plug 'nvim-treesitter/nvim-treesitter' "https://github.com/nvim-treesitter/nvim-treesitter/issues/700
 call plug#end()
