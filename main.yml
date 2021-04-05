@@ -6,7 +6,7 @@
 
   tasks:
       - name: Perform system update
-        shell: "yes | pacman -Syu"
+        shell: yes | pacman -Syu
         register: system_update_shell_output
       - debug:
           msg: "{{ system_update_shell_output }}"
@@ -55,7 +55,6 @@
             yes | pacman -S tree
             yes | pacman -S curl
             cd /home/{{ ansible_env.SUDO_USER }}/
-            curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
         register: package_download_shell_output
       - debug:
           msg: "{{ package_download_shell_output }}"
@@ -97,6 +96,14 @@
       - debug:
           msg: "{{ copy_neovim_and_terminal_configs_output }}"
 
+      - name: Install vim-plug
+        shell: |
+            mkdir -p /home/{{ ansible_env.SUDO_USER }}/.vim/autoload/
+            curl https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim > /home/{{ ansible_env.SUDO_USER }}/.vim/autoload/plug.vim
+        register: vim_plug_install_output
+      - debug:
+          msg: "{{ vim_plug_install_output }}"
+
       - name: Enable vim plugins
         shell: nvim +PlugInstall +qall
         register: pluginstall_output
@@ -112,7 +119,7 @@
           msg: "{{ xorg_install_shell_output }}"
       
       - name: Install i3wm
-        shell: "yes | pacman -S i3-gaps"
+        shell: yes | pacman -S i3-gaps
         register: i3wm_install_shell_output
       - debug:
           msg: "{{ i3wm_install_shell_output }}"
@@ -139,3 +146,27 @@
         register: copy_i3wm_configs_output
       - debug:
           msg: "{{ copy_i3wm_configs_output }}"
+
+      - name: Find mozilla prefs.js file
+        shell: find /home/{{ ansible_env.SUDO_USER }}/.mozilla -iname prefs.js
+        register: prefs_path
+      - debug:
+          msg: "{{ prefs_path }}"
+
+      - name: Set firefox settings
+        shell: echo 'user_pref("ui.context_menus.after_mouseup", true);' >> {{ prefs_path }}
+        register: set_ff_settings_output
+      - debug:
+          msg: "{{ set_ff_settings_outputi }}"
+
+      - name: Change ownership of sudoer home to sudoer
+        shell: chown -R {{ ansible_env.SUDO_USER }}:users /home/{{ ansible_env.SUDO_USER }}/
+        register: chown_to_sudoer_output
+      - debug:
+          msg: "{{ chown_to_sudoer_output }}"
+
+      - name: Make shell scripts executable
+        shell: chmod -R +x /home/{{ ansible_env.SUDO_USER }}/Scripts/
+        register: chmod_exec_scripts_output
+      - debug:
+          msg: "{{ chmod_exec_scripts_output }}"
