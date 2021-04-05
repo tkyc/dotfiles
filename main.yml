@@ -72,12 +72,17 @@
       - debug:
           msg: "{{ neovim_install_shell_output }}"
 
-      - name: Enabling neovim and terminal
+      - name: Create config paths for neovim and terminal
         shell: |
             mkdir -p /home/{{ ansible_env.SUDO_USER }}/.vim/colors/
-            mkidr -p /home/{{ ansible_env.SUDO_USER }}/.config/nvim/
+            mkdir -p /home/{{ ansible_env.SUDO_USER }}/.config/nvim/
             cd /home/{{ ansible_env.SUDO_USER }}/
-            git clone https://github.com/tkyc/tmux-themepack.git
+            git clone https://github.com/tkyc/tmux-themepack.git /home/{{ ansible_env.SUDO_USER }}/.tmux-themepack
+        register: neovim_and_terminal_config_paths_output
+      - debug:
+          msg: "{{ neovim_and_terminal_config_paths_output }}"
+
+      - name: Copy neovim and terminal configs to config directories
         copy: src={{ item.src }} dest={{ item.dest }}
         with_items:
             - { src: "{{ playbook_dir }}/.vimrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.vimrc" }
@@ -88,16 +93,20 @@
             - { src: "{{ playbook_dir }}/.tmux.conf", dest: "/home/{{ ansible_env.SUDO_USER }}/.tmux.conf" }
             - { src: "{{ playbook_dir }}/.bashrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.bashrc" }
             - { src: "{{ playbook_dir }}/.bash_profile", dest: "/home/{{ ansible_env.SUDO_USER }}/.bash_profile" }
+        register: copy_neovim_and_terminal_configs_output
       - debug:
-          msg: "Enabling neovim and terminal"
+          msg: "{{ copy_neovim_and_terminal_configs_output }}"
 
       - name: Enable vim plugins
         shell: nvim +PlugInstall +qall
+        register: pluginstall_output
       - debug:
-          msg: "Enabling vim plugins"
+          msg: "{{ pluginstall_output }}"
 
       - name: Install Xorg display server
-        shell: "pacman -S --noconfirm xorg"
+        shell: |
+            yes | pacman -S --noconfirm xorg
+            yes | pacman -S --noconfirm xorg-xinit
         register: xorg_install_shell_output
       - debug:
           msg: "{{ xorg_install_shell_output }}"
@@ -108,17 +117,25 @@
       - debug:
           msg: "{{ i3wm_install_shell_output }}"
       
-      - name: Enabling i3wm
+      - name: Enable i3wm
         shell: |
             mkdir -p /home/{{ ansible_env.SUDO_USER }}/Scripts/
-            mkidr -p /home/{{ ansible_env.SUDO_USER }}/Folder/backgrounds/
-            mkdir -p /home/{{ ansible_env.SUDO_USER }}/Repos
+            mkdir -p /home/{{ ansible_env.SUDO_USER }}/Folder/backgrounds/
+            mkdir -p /home/{{ ansible_env.SUDO_USER }}/Repos/
+            mkdir -p /home/{{ ansible_env.SUDO_USER }}/.config/i3/
+            mkdir -p /home/{{ ansible_env.SUDO_USER }}/.config/gtk-3.0/
+      - debug:
+          msg: "Enabling i3wm"
+
+      - name: Copy i3wm config files to relevant directories
         copy: src={{ item.src }} dest={{ item.dest }}
         with_items:
             - { src: "{{ playbook_dir }}/.xinitrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.xinitrc" }
             - { src: "{{ playbook_dir }}/.i3blocks.conf", dest: "/home/{{ ansible_env.SUDO_USER }}/.i3blocks.conf" }
             - { src: "{{ playbook_dir }}/config", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/i3/config" }
-            - { src: "{{ playbook_dir }}/scripts/*", dest: "/home/{{ ansible_env.SUDO_USER }}/Scripts/" }
+            - { src: "{{ playbook_dir }}/scripts/", dest: "/home/{{ ansible_env.SUDO_USER }}/Scripts/" }
             - { src: "{{ playbook_dir }}/00.jpg", dest: "/home/{{ ansible_env.SUDO_USER }}/Folder/backgrounds/00.jpg" }
+            - { src: "{{ playbook_dir }}/settings.ini", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/gtk-3.0/settings.ini" }
+        register: copy_i3wm_configs_output
       - debug:
-          msg: "Enabling i3wm"
+          msg: "{{ copy_i3wm_configs_output }}"
