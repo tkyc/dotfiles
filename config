@@ -57,11 +57,11 @@ client.focused_inactive   #4b846c    #162127        #162127    #5F676A       #5F
 client.background #000000
 
 #Set window gaps
-gaps inner 7
-gaps outer 7
+gaps inner 0
+gaps outer 0
 
 #Desktop background -- place image in downloads folder in home directory and hide window bar
-exec --no-startup-id feh --bg-scale ~/Folder/backgrounds/00.jpg
+exec --no-startup-id feh --bg-scale ~/Folder/backgrounds/01.jpg
 
 #Disable screen saver -- screen won't go black after a few minutes
 exec --no-startup-id xset s off

@@ -141,7 +141,7 @@
             - { src: "{{ playbook_dir }}/.i3blocks.conf", dest: "/home/{{ ansible_env.SUDO_USER }}/.i3blocks.conf" }
             - { src: "{{ playbook_dir }}/config", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/i3/config" }
             - { src: "{{ playbook_dir }}/scripts/", dest: "/home/{{ ansible_env.SUDO_USER }}/Scripts/" }
-            - { src: "{{ playbook_dir }}/00.jpg", dest: "/home/{{ ansible_env.SUDO_USER }}/Folder/backgrounds/00.jpg" }
+            - { src: "{{ playbook_dir }}/backgrounds/", dest: "/home/{{ ansible_env.SUDO_USER }}/Folder/backgrounds/" }
             - { src: "{{ playbook_dir }}/settings.ini", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/gtk-3.0/settings.ini" }
         register: copy_i3wm_configs_output
       - debug:

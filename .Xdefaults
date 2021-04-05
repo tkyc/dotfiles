@@ -13,7 +13,7 @@ URxvt.cursorBlink:      true
 URxvt.internalBorder:   15
 
 !! Opacity
-URxvt.transparent:      true
+URxvt.transparent:      false
 URxvt.shading:          3
 
 !! Mouse
