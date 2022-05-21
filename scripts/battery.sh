@@ -14,4 +14,6 @@ BAT1_NOW=$(cat /sys/class/power_supply/BAT1/uevent | grep ENERGY_NOW | tr -d -c 
 
 BAT_NOW=$(($BAT0_NOW + $BAT1_NOW))
 
-echo "<span> $((100 * BAT_NOW / BAT_MAX))% </span>"
+#echo "<span>$((100 * BAT_NOW / BAT_MAX)) </span>"
+
+echo "<span background='#FF9A21'>  $((100 * BAT_NOW / BAT_MAX)) NRG </span>"

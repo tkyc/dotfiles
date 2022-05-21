@@ -14,7 +14,7 @@ URxvt.internalBorder:   15
 
 !! Opacity
 URxvt.transparent:      false
-URxvt.shading:          3
+URxvt.shading:          15
 
 !! Mouse
 URxvt.pointerBlank:     true
@@ -37,9 +37,8 @@ URxvt.iso14755_52:            false
 
 
 
-!! Colorscheme---------------------------------------------------------------------
+!! Colorscheme Main----------------------------------------------------------------
 
-! Main colour scheme
 ! special
 *.foreground: #93a1a1
 *.background: #141c21
@@ -70,18 +69,22 @@ URxvt.iso14755_52:            false
 *.color13: #8086e8
 
 ! cyan
-!*.color6: #289c93
-*.color6: #4b846c
+*.color6: #289c93
 *.color14: #33c5ba
 
 ! white
 *.color7: #bfbaac
 *.color15: #fdf6e3
 
-!! Gruvbox colour scheme
-!!hard contrast: *background: #1d2021
+!!---------------------------------------------------------------------------------
+
+
+
+!! Colorscheme Gruvbox-------------------------------------------------------------
+
+!! hard contrast: *background: #1d2021
 !*background: #282828
-!!soft contrast: *background: #32302f
+!! soft contrast: *background: #32302f
 !*foreground: #ebdbb2
 !! Black + DarkGrey
 !*color0:  #282828
@@ -107,4 +110,6 @@ URxvt.iso14755_52:            false
 !! LightGrey + White
 !*color7:  #a89984
 !*color15: #ebdbb2
+
 !!---------------------------------------------------------------------------------
+

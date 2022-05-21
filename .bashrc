@@ -5,8 +5,17 @@
 # Personal shell scripts
 export PATH=$PATH:/home/tkyc/Scripts
 
-# Autocomplete shell commands after "sudo"
-complete -cf sudo
+# Intellij
+export PATH=$PATH:/bin/idea
+
+# JAVA_HOME
+# export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+export JAVA_HOME=/usr/lib/jvm/java-16-openjdk/jdk-16.0.1
+
+export PATH=$PATH:$HOME/.local/bin
+
+# mssql server jdbc test connection string
+export mssql_jdbc_test_connection_properties="jdbc:sqlserver://0.0.0.0:1433;user=sa;password=;"
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return

@@ -40,6 +40,11 @@ set cul
 
 
 
+"Run Java lsp exit script on closing a java file and last remaining nvim editor
+":autocmd BufWinLeave * !exitlsp.sh %:p
+
+
+
 "Key remaps and command macros
 noremap <silent><esc> <esc>:noh<CR><esc>
 map <C-h> :nohlsearch <CR>
@@ -85,11 +90,34 @@ highlight clear SignColumn
 
 
 
+"Exit terminal mode for vim-test, which is used to run tests
+if has('nvim')
+  tmap <C-o> <C-\><C-n>
+endif
+
+
+
+"fzf preview window sizing
+"let g:fzf_preview_window = ['right:50%', 'ctrl-/']
+"let g:fzf_preview_window = ['up:80%:hidden', 'ctrl-/']
+"call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case -- ".shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
+"command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, <bang>0, a:fullscreen)
+"command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
+:set guicursor=a:blinkon100
+
+
 "Plugins start --- vim-plug is the plugin manager
 call plug#begin('~/.vim/plugged')
 "Plug 'maxmellon/vim-jsx-pretty'
 "Plug 'sheerun/vim-polyglot'
 "Plug 'christianchiarulli/nvcode-color-schemes.vim'
+"Plug 'neovim/nvim-lspconfig'
+"Plug 'kabouzeid/nvim-lspinstall', {'branch': 'main'}
+"Plug 'glepnir/lspsaga.nvim', {'branch': 'main'}
+"Plug 'hrsh7th/nvim-compe'
+"Plug 'mfussenegger/nvim-jdtls'
+Plug 'mfussenegger/nvim-dap'
+Plug 'vim-test/vim-test'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'

@@ -46,12 +46,21 @@ font pango:monospace 8, NotoSansMono Nerd Font 11
 
 #Hide window names and enable window outline (Need to enable for desktop bg to work with feh)
 #new_window pixel 1
-for_window [class="^.*"] border pixel 1
+for_window [class="URxvt"] border pixel 1
+for_window [class="Mousepad"] border pixel 1
+for_window [class="firefox"] border pixel 0
+for_window [class="idea"] border pixel 0
+for_window [class="Postman"] border pixel 0
+for_window [class="azuredatastudio"] border pixel 0
+#for_window [class="^(?!foo$|bar$).*"] border pixel 0
+
+#Past colors
+#4b846c -- green
 
 #Colors                   border,    background,    text,      indicator,    child border
-client.focused            #4b846c    #162127        #162127    #4b846c       #4b846c
-client.unfocused          #4b846c    #162127        #162127    #5F676A       #5F676A
-client.focused_inactive   #4b846c    #162127        #162127    #5F676A       #5F676A
+client.focused            #000000    #162127        #162127    #aecc6f       #aecc6f
+client.unfocused          #000000    #162127        #162127    #5F676A       #5F676A
+client.focused_inactive   #000000    #162127        #162127    #5F676A       #5F676A
 
 #Window background color
 client.background #000000
@@ -61,7 +70,7 @@ gaps inner 0
 gaps outer 0
 
 #Desktop background -- place image in downloads folder in home directory and hide window bar
-exec --no-startup-id feh --bg-scale ~/Folder/backgrounds/01.jpg
+exec --no-startup-id feh --bg-scale ~/Folder/backgrounds/bg4.jpg
 
 #Disable screen saver -- screen won't go black after a few minutes
 exec --no-startup-id xset s off
@@ -226,8 +235,10 @@ bar {
 
     colors {
         separator #162127 
-        background #162127
-        focused_workspace #4b846c #4b846c #ffffff
+        background #000000
+        #colors            border  bg      text
+        focused_workspace  #aecc6f #aecc6f #000000
+        inactive_workspace #333333 #222222 #888888 #aea79f
     }
 
 	position top
