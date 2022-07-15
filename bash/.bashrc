@@ -25,6 +25,9 @@ auto_start_tmux
 # Personal shell scripts
 export PATH=$PATH:/home/tkyc/Scripts
 
+# Enable fzf to search hidden directories/files
+export FZF_DEFAULT_COMMAND="find -L"
+
 # Autocomplete shell commands after "sudo"
 complete -cf sudo
 

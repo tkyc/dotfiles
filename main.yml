@@ -43,7 +43,6 @@
             yes | pacman -S ripgrep
             yes | pacman -S nodejs
             yes | pacman -S feh
-            yes | pacman -S i3blocks
             yes | pacman -S tmux
             yes | pacman -S rxvt-unicode
             yes | pacman -S openssh
@@ -84,14 +83,14 @@
       - name: Copy neovim and terminal configs to config directories
         copy: src={{ item.src }} dest={{ item.dest }}
         with_items:
-            - { src: "{{ playbook_dir }}/.vimrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.vimrc" }
-            - { src: "{{ playbook_dir }}/init.vim", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/nvim/init.vim" }
-            - { src: "{{ playbook_dir }}/coc.vim", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/nvim/coc.vim" }
-            - { src: "{{ playbook_dir }}/profile.vim", dest: "/home/{{ ansible_env.SUDO_USER }}/.vim/colors/profile.vim" }
-            - { src: "{{ playbook_dir }}/.Xdefaults", dest: "/home/{{ ansible_env.SUDO_USER }}/.Xdefaults" }
-            - { src: "{{ playbook_dir }}/.tmux.conf", dest: "/home/{{ ansible_env.SUDO_USER }}/.tmux.conf" }
-            - { src: "{{ playbook_dir }}/.bashrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.bashrc" }
-            - { src: "{{ playbook_dir }}/.bash_profile", dest: "/home/{{ ansible_env.SUDO_USER }}/.bash_profile" }
+            - { src: "{{ playbook_dir }}/nvim/.vimrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.vimrc" }
+            - { src: "{{ playbook_dir }}/nvim/init.vim", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/nvim/init.vim" }
+            - { src: "{{ playbook_dir }}/nvim/coc.vim", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/nvim/coc.vim" }
+            - { src: "{{ playbook_dir }}/nvim/profile.vim", dest: "/home/{{ ansible_env.SUDO_USER }}/.vim/colors/profile.vim" }
+            - { src: "{{ playbook_dir }}/x11/.Xdefaults", dest: "/home/{{ ansible_env.SUDO_USER }}/.Xdefaults" }
+            - { src: "{{ playbook_dir }}/tmux/.tmux.conf", dest: "/home/{{ ansible_env.SUDO_USER }}/.tmux.conf" }
+            - { src: "{{ playbook_dir }}/bash/.bashrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.bashrc" }
+            - { src: "{{ playbook_dir }}/bash/.bash_profile", dest: "/home/{{ ansible_env.SUDO_USER }}/.bash_profile" }
         register: copy_neovim_and_terminal_configs_output
       - debug:
           msg: "{{ copy_neovim_and_terminal_configs_output }}"
@@ -118,13 +117,7 @@
       - debug:
           msg: "{{ xorg_install_shell_output }}"
       
-      - name: Install i3wm
-        shell: yes | pacman -S i3-gaps
-        register: i3wm_install_shell_output
-      - debug:
-          msg: "{{ i3wm_install_shell_output }}"
-      
-      - name: Enable i3wm
+      - name: Setup general directories
         shell: |
             mkdir -p /home/{{ ansible_env.SUDO_USER }}/Scripts/
             mkdir -p /home/{{ ansible_env.SUDO_USER }}/Folder/backgrounds/
@@ -134,18 +127,16 @@
       - debug:
           msg: "Enabling i3wm"
 
-      - name: Copy i3wm config files to relevant directories
+      - name: Copy x11 dotfiles to respective directories
         copy: src={{ item.src }} dest={{ item.dest }}
         with_items:
-            - { src: "{{ playbook_dir }}/.xinitrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.xinitrc" }
-            - { src: "{{ playbook_dir }}/.i3blocks.conf", dest: "/home/{{ ansible_env.SUDO_USER }}/.i3blocks.conf" }
-            - { src: "{{ playbook_dir }}/config", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/i3/config" }
+            - { src: "{{ playbook_dir }}/x11/.xinitrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.xinitrc" }
             - { src: "{{ playbook_dir }}/scripts/", dest: "/home/{{ ansible_env.SUDO_USER }}/Scripts/" }
             - { src: "{{ playbook_dir }}/backgrounds/", dest: "/home/{{ ansible_env.SUDO_USER }}/Folder/backgrounds/" }
-            - { src: "{{ playbook_dir }}/settings.ini", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/gtk-3.0/settings.ini" }
-        register: copy_i3wm_configs_output
+            - { src: "{{ playbook_dir }}/gtk/settings.ini", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/gtk-3.0/settings.ini" }
+        register: copy_x11_dotfiles_output
       - debug:
-          msg: "{{ copy_i3wm_configs_output }}"
+          msg: "{{ copy_x11_dotfiles_output }}"
 
       - name: Find mozilla prefs.js file
         shell: find /home/{{ ansible_env.SUDO_USER }}/.mozilla -iname prefs.js
