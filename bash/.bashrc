@@ -1,5 +1,5 @@
-# Functions
-#
+# Functions --------------------------------------------------------------------------------------------
+
 # Gets current branch
 parse_git_branch() {
     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
@@ -16,21 +16,24 @@ auto_start_tmux() {
 
 auto_start_tmux
 
+#--------------------------------------------------------------------------------------------------------
 
 
-# General exports
-#
+
+# General -----------------------------------------------------------------------------------------------
+
 # Personal shell scripts
 export PATH=$PATH:/home/tkyc/Scripts
-
-
 
 # Autocomplete shell commands after "sudo"
 complete -cf sudo
 
+#--------------------------------------------------------------------------------------------------------
 
 
-# Terminal prompt display -- configure what is displayed on terminal prompt ex. directory, git branch, etc...
+
+# Terminal prompt display -------------------------------------------------------------------------------
+
 colour='\[\e[36m\]'
 no_colour='\[\e[0m\]'
 alias ls='ls --color=auto'
@@ -43,4 +46,6 @@ if pgrep -x "dwm" > /dev/null; then
 fi
 
 export PS1=$ps1
+
+#--------------------------------------------------------------------------------------------------------
 

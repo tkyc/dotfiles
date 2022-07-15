@@ -1,6 +1,6 @@
 "File belongs in ~/.config/nvim/init.vim
 
-"Readin settings for neovim from .vimrc
+"Read in settings for neovim from .vimrc
 set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath=&runtimepath
 source ~/.vimrc
