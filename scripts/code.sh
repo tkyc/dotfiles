@@ -34,3 +34,4 @@ nvim .
 #tmux split-window -h
 #tmux resize-pane -y 9
 #tmux select-pane -t 0
+

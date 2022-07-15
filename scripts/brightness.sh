@@ -21,3 +21,4 @@ if [ "$1" == "$inc" ];then
 else
     echo $(($current_brightness - $val)) | sudo tee /sys/class/backlight/${device}/brightness;
 fi
+

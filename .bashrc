@@ -1,43 +1,46 @@
+# Functions
 #
-# ~/.bashrc
-#
+# Gets current branch
+parse_git_branch() {
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
 
+# Launch tmux when terminal opens
+auto_start_tmux() {
+    if [[ $DISPLAY ]]; then
+        # If not running interactively, do not do anything
+        [[ $- != *i* ]] && return
+        [[ -z "$TMUX" ]] && exec tmux
+    fi
+}
+
+auto_start_tmux
+
+
+
+# General exports
+#
 # Personal shell scripts
 export PATH=$PATH:/home/tkyc/Scripts
+
+
 
 # Autocomplete shell commands after "sudo"
 complete -cf sudo
 
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
 
-# Launch tmux when terminal opens
-if [[ $DISPLAY ]]; then
-    # If not running interactively, do not do anything
-    [[ $- != *i* ]] && return
-    [[ -z "$TMUX" ]] && exec tmux
-fi
-
-# Attach back to previous tmux session
-#if [[ -z "$TMUX" ]] ;then
-#    ID="$( tmux ls | grep -vm1 attached | cut -d: -f1 )" # get the id of a deattached session
-#    if [[ -z "$ID" ]] ;then # if not available create a new one
-#        tmux new-session
-#    else
-#        tmux attach-session -t "$ID" # if available attach to it
-#    fi
-#fi
 
 # Terminal prompt display -- configure what is displayed on terminal prompt ex. directory, git branch, etc...
 colour='\[\e[36m\]'
 no_colour='\[\e[0m\]'
 alias ls='ls --color=auto'
 
-parse_git_branch() {
-     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
-}
+# Default terminal prompt display
+ps1='[\u@\h \W] '
 
-#export PS1='[\u@\h \W]\$ '
+if pgrep -x "dwm" > /dev/null; then
+    ps1="[\u@\h \[\e[32m\]\w\[\e[91m\]\$(parse_git_branch)\[\e[00m\] ${colour}${no_colour}] " # 
+fi
 
-# 
-export PS1="[\u@\h \[\e[32m\]\w\[\e[91m\]\$(parse_git_branch)\[\e[00m\] ${colour}${no_colour}] "
+export PS1=$ps1
+

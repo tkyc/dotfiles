@@ -12,10 +12,8 @@ fi
 cp /home/$user/Scripts/* .
 
 # Update dotfiles
-#cp /home/$user/.config/i3status/i3status.conf ../
 cp /home/$user/.bash_profile ../
 cp /home/$user/.bashrc ../
-cp /home/$user/.i3blocks.conf ../
 cp /home/$user/.config/i3/config ../
 cp /home/$user/.config/gtk-3.0/settings.ini ../
 cp /home/$user/.tmux.conf ../
@@ -25,3 +23,4 @@ cp /home/$user/.config/nvim/init.vim ../
 cp /home/$user/.config/nvim/coc.vim ../
 cp /home/$user/.Xdefaults ../
 cp /home/$user/.xinitrc ../
+

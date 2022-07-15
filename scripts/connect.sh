@@ -16,3 +16,4 @@
 sudo ip link wlp3s0 set up
 sudo wpa_supplicant -B -i wlp3s0 -c /etc/wpa_supplicant.conf
 sudo dhclient wlp3s0
+

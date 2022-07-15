@@ -12,9 +12,9 @@ URxvt.cursorBlink:      true
 !! Terminal padding
 URxvt.internalBorder:   15
 
-!! Opacity
-URxvt.transparent:      false
-URxvt.shading:          3
+!! Opacity --- load new changes by executing: xrdb -load ~/.Xdefaults
+URxvt.transparent:      true 
+URxvt.shading:          10
 
 !! Mouse
 URxvt.pointerBlank:     true
@@ -43,7 +43,7 @@ URxvt.iso14755_52:            false
 ! special
 *.foreground: #93a1a1
 *.background: #141c21
-*.cursorColor: #afbfbff
+*.cursorColor: #d7af00
 
 ! black
 *.color0: #263640
@@ -62,15 +62,14 @@ URxvt.iso14755_52:            false
 *.color11: #d9a400
 
 ! blue
-*.color4: #2587cc
-*.color12: #2ca2f5
+*.color4: #084973
+*.color12: #084973
 
 ! magenta
 *.color5: #696ebf
 *.color13: #8086e8
 
 ! cyan
-!*.color6: #289c93
 *.color6: #4b846c
 *.color14: #33c5ba
 
@@ -78,33 +77,5 @@ URxvt.iso14755_52:            false
 *.color7: #bfbaac
 *.color15: #fdf6e3
 
-!! Gruvbox colour scheme
-!!hard contrast: *background: #1d2021
-!*background: #282828
-!!soft contrast: *background: #32302f
-!*foreground: #ebdbb2
-!! Black + DarkGrey
-!*color0:  #282828
-!*color8:  #928374
-!! DarkRed + Red
-!*color1:  #cc241d
-!*color9:  #fb4934
-!! DarkGreen + Green
-!*color2:  #98971a
-!*color10: #b8bb26
-!! DarkYellow + Yellow
-!*color3:  #d79921
-!*color11: #fabd2f
-!! DarkBlue + Blue
-!*color4:  #458588
-!*color12: #83a598
-!! DarkMagenta + Magenta
-!*color5:  #b16286
-!*color13: #d3869b
-!! DarkCyan + Cyan
-!*color6:  #689d6a
-!*color14: #8ec07c
-!! LightGrey + White
-!*color7:  #a89984
-!*color15: #ebdbb2
 !!---------------------------------------------------------------------------------
+

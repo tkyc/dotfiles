@@ -16,3 +16,4 @@ nvim_editor_count=$(ps ax | grep nvim | awk '/[0-9]\snvim.*/' | wc -l)
 if [[ "$1" =~ .*".java"$ ]]; then
     pkill -f jvm
 fi
+
