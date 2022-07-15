@@ -1,7 +1,6 @@
-#Personal auto rice for i3wm environment -- always a WIP
+#Dotfiles
 
-Create "Scripts" folder in home directory and place scripts from repo in there
-All scripts are execute only, so edits require permission changes
+ansible-playbook main.yml --ask-become-pass
 
 1. Setup wifi
     - wireless_tools, dhclient, wpa_supplicant
