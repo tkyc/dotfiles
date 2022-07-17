@@ -45,17 +45,37 @@ URxvt.iso14755_52:            false
 *.background: #141c21
 *.cursorColor: #c678dd
 
-! Hidden file & executable file colour
-*.color2: #5fd700
-*.color10: #e5c07b
+! black
+URxvt.color0: #2E3440
+URxvt.color8: #4C566A
 
-! Directory colour
-*.color4: #00afd7
-*.color12: #00afd7
+! red
+URxvt.color1: #88C0D0
+URxvt.color9: #88C0D0
 
-! Tmux bar background colour
-*.color0: #263640
-*.color8: #4a697d
+! green
+URxvt.color2:  #BF616A
+URxvt.color10: #BF616A
+
+! yellow
+URxvt.color3:  #5E81AC
+URxvt.color11: #5E81AC
+
+! blue
+URxvt.color4:  #EBCB8B
+URxvt.color12: #EBCB8B
+
+! magenta
+URxvt.color5:  #A3BE8C
+URxvt.color13: #A3BE8C
+
+! cyan
+URxvt.color6:  #D08770
+URxvt.color14: #D08770
+
+! white
+URxvt.color7:  #E5E9F0
+URxvt.color15: #8FBCBB
 
 !!---------------------------------------------------------------------------------
 
