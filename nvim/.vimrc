@@ -52,6 +52,7 @@ map <C-n> :NERDTreeToggle <CR>
 "Vim powerline enable
 set laststatus=2
 set showtabline=2
+let g:airline#extensions#whitespace#enabled=0 "Toggle whitespace check extension
 let g:airline#extensions#tabline#enabled=1 "Toggle showing of tab panel, 0 = false 1 = true
 let g:airline#extensions#tabline#tab_nr_type=1 "Configure individual tab display content
 let g:airline#extensions#tabline#tab_min_count = 2 "Minimum number of tabs to appear in tab panel
@@ -61,9 +62,10 @@ if !exists('g:airline_symbols')
     let g:airline_symbols={}
 endif
 "let g:airline_theme='powerlineish'
-let g:airline_theme='angr'
+"let g:airline_theme='angr'
+let g:airline_theme='luna'
 let g:airline_symbols.linenr=''
-let g:airline_symbols.maxlinenr=' '
+let g:airline_symbols.maxlinenr=' col '
 
 
 
