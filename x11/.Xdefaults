@@ -43,15 +43,15 @@ URxvt.iso14755_52:            false
 ! special
 *.foreground: #93a1a1
 *.background: #141c21
-*.cursorColor: #808080
+*.cursorColor: #c678dd
 
 ! Hidden file & executable file colour
-*.color2: #00ff00
-*.color10: #00ff00
+*.color2: #5fd700
+*.color10: #e5c07b
 
 ! Directory colour
-*.color4: #00ff00
-*.color12: #00ff00
+*.color4: #00afd7
+*.color12: #00afd7
 
 ! Tmux bar background colour
 *.color0: #263640

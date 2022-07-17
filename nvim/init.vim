@@ -8,7 +8,7 @@ source ~/.vimrc
 "Turn on nvim-treesitter
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained",
+    ensure_installed = {"java", "cpp", "c", "python", "javascript", "typescript", "lua"},
   highlight = {
     enable = true,
   },

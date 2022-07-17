@@ -45,7 +45,7 @@ alias ls='ls --color=auto'
 ps1='[\u@\h \W] '
 
 if pgrep -x "dwm" > /dev/null; then
-    ps1="[\u@\h \[\e[36m\]\w\[\e[91m\]\$(parse_git_branch)\[\e[00m\] ${colour}${no_colour}] " # 
+    ps1="[\u@\h \[\e[215m\]\w\[\e[215m\]\$(parse_git_branch)\[\e[00m\] ${colour}${no_colour}] " # ,36m,91m
 fi
 
 export PS1=$ps1
