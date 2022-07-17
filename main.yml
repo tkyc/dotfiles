@@ -38,6 +38,7 @@
       - name: Download required packages
         shell: |
             yes | pacman -S htop
+            yes | pacman -S jack2
             yes | pacman -S alsa-utils
             yes | pacman -S fzf
             yes | pacman -S ripgrep
@@ -103,12 +104,6 @@
       - debug:
           msg: "{{ vim_plug_install_output }}"
 
-      - name: Enable vim plugins
-        shell: nvim +PlugInstall +qall
-        register: pluginstall_output
-      - debug:
-          msg: "{{ pluginstall_output }}"
-
       - name: Install Xorg display server
         shell: |
             yes | pacman -S --noconfirm xorg
@@ -125,7 +120,7 @@
             mkdir -p /home/{{ ansible_env.SUDO_USER }}/.config/i3/
             mkdir -p /home/{{ ansible_env.SUDO_USER }}/.config/gtk-3.0/
       - debug:
-          msg: "Enabling i3wm"
+          msg: "Setup general directories"
 
       - name: Copy x11 dotfiles to respective directories
         copy: src={{ item.src }} dest={{ item.dest }}
@@ -138,18 +133,6 @@
       - debug:
           msg: "{{ copy_x11_dotfiles_output }}"
 
-      - name: Find mozilla prefs.js file
-        shell: find /home/{{ ansible_env.SUDO_USER }}/.mozilla -iname prefs.js
-        register: prefs_path
-      - debug:
-          msg: "{{ prefs_path }}"
-
-      - name: Set firefox settings
-        shell: echo 'user_pref("ui.context_menus.after_mouseup", true);' >> {{ prefs_path }}
-        register: set_ff_settings_output
-      - debug:
-          msg: "{{ set_ff_settings_outputi }}"
-
       - name: Change ownership of sudoer home to sudoer
         shell: chown -R {{ ansible_env.SUDO_USER }}:users /home/{{ ansible_env.SUDO_USER }}/
         register: chown_to_sudoer_output
@@ -161,4 +144,12 @@
         register: chmod_exec_scripts_output
       - debug:
           msg: "{{ chmod_exec_scripts_output }}"
+
+      - name: Enable vim plugins
+        shell: |
+            cd /home/{{ ansible_env.SUDO_USER}}
+            nvim +PlugInstall +qall
+        register: pluginstall_output
+      - debug:
+          msg: "{{ pluginstall_output }}"
 
