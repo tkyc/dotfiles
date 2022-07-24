@@ -28,6 +28,9 @@ export PATH=$PATH:/home/tkyc/Scripts
 # Enable fzf to search hidden directories/files
 export FZF_DEFAULT_COMMAND="find -L"
 
+# JAVA_HOME
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+
 # Autocomplete shell commands after "sudo"
 complete -cf sudo
 
