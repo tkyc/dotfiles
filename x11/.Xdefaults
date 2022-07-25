@@ -14,7 +14,7 @@ URxvt.internalBorder:   15
 
 !! Opacity --- load new changes by executing: xrdb -load ~/.Xdefaults
 URxvt.transparent:      true
-URxvt.shading:          7
+URxvt.shading:          15
 
 !! Mouse
 URxvt.pointerBlank:     true
@@ -37,48 +37,89 @@ URxvt.iso14755_52:            false
 
 
 
-!! Colorscheme---------------------------------------------------------------------
+!! Colorschemes--------------------------------------------------------------------
 
-! Main colour scheme
-! special
-*.foreground: #93a1a1
-*.background: #141c21
-*.cursorColor: #c678dd
+!! Main colour scheme
+!! special
+!*.foreground: #93a1a1
+!*.background: #141c21
+!*.cursorColor: #c678dd
+!
+!! black
+!URxvt.color0: #2E3440
+!URxvt.color8: #4C566A
+!
+!! red
+!URxvt.color1: #88C0D0
+!URxvt.color9: #88C0D0
+!
+!! green
+!URxvt.color2:  #BF616A
+!URxvt.color10: #BF616A
+!
+!! yellow
+!URxvt.color3:  #5E81AC
+!URxvt.color11: #5E81AC
+!
+!! blue
+!URxvt.color4:  #EBCB8B
+!URxvt.color12: #EBCB8B
+!
+!! magenta
+!URxvt.color5:  #A3BE8C
+!URxvt.color13: #A3BE8C
+!
+!! cyan
+!!URxvt.color6:  #D08770
+!!URxvt.color14: #D08770
+!
+!URxvt.color6:  #FF8547
+!URxvt.color14: #FF8547
+!
+!! white
+!URxvt.color7:  #E5E9F0
+!URxvt.color15: #8FBCBB
 
-! black
-URxvt.color0: #2E3440
-URxvt.color8: #4C566A
+!! Nord colour scheme
+#define nord0 #2E3440
+#define nord1 #3B4252
+#define nord2 #434C5E
+#define nord3 #4C566A
+#define nord4 #D8DEE9
+#define nord5 #E5E9F0
+#define nord6 #ECEFF4
+#define nord7 #8FBCBB
+#define nord8 #88C0D0
+#define nord9 #81A1C1
+#define nord10 #5E81AC
+#define nord11 #BF616A
+#define nord12 #D08770
+#define nord13 #EBCB8B
+#define nord14 #A3BE8C
+#define nord15 #B48EAD
 
-! red
-URxvt.color1: #88C0D0
-URxvt.color9: #88C0D0
+*.foreground:   nord4
+*.background:   nord0
+*.cursorColor:  nord15
+*fading: 35
+*fadeColor: nord3
 
-! green
-URxvt.color2:  #BF616A
-URxvt.color10: #BF616A
-
-! yellow
-URxvt.color3:  #5E81AC
-URxvt.color11: #5E81AC
-
-! blue
-URxvt.color4:  #EBCB8B
-URxvt.color12: #EBCB8B
-
-! magenta
-URxvt.color5:  #A3BE8C
-URxvt.color13: #A3BE8C
-
-! cyan
-!URxvt.color6:  #D08770
-!URxvt.color14: #D08770
-
-URxvt.color6:  #FF8547
-URxvt.color14: #FF8547
-
-! white
-URxvt.color7:  #E5E9F0
-URxvt.color15: #8FBCBB
+*.color0: nord1
+*.color1: nord11
+*.color2: nord14
+*.color3: nord13
+*.color4: nord9
+*.color5: nord15
+*.color6: nord8
+*.color7: nord5
+*.color8: nord3
+*.color9: nord11
+*.color10: nord14
+*.color11: nord13
+*.color12: nord9
+*.color13: nord15
+*.color14: nord7
+*.color15: nord6
 
 !!---------------------------------------------------------------------------------
 

@@ -1,5 +1,5 @@
 # Sets background
-feh --bg-scale ~/Folder/backgrounds/00.jpg
+feh --bg-scale ~/Folder/backgrounds/101.png
 
 # Sets terminal settings
 xrdb -load ~/.Xdefaults
