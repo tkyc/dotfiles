@@ -63,7 +63,8 @@ if !exists('g:airline_symbols')
 endif
 "let g:airline_theme='powerlineish'
 "let g:airline_theme='angr'
-let g:airline_theme='luna'
+"let g:airline_theme='luna'
+let g:airline_theme='minimalist'
 let g:airline_symbols.linenr=''
 let g:airline_symbols.maxlinenr=' col '
 
@@ -101,4 +102,6 @@ Plug 'junegunn/fzf'
 Plug 'airblade/vim-gitgutter'
 Plug 'ryanoasis/vim-devicons'
 Plug 'nvim-treesitter/nvim-treesitter' "https://github.com/nvim-treesitter/nvim-treesitter/issues/700
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 call plug#end()

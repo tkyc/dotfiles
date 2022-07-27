@@ -4,7 +4,7 @@
 URxvt.scrollBar:        false
 
 !! Nerd font
-URxvt.font:             xft:Inconsolata\ Nerd\ Font\ Mono:style=Medium:size=12
+URxvt.font:             xft:Inconsolata\ Nerd\ Font\ Mono:style=Medium:size=12.5
 
 !! Cursor
 URxvt.cursorBlink:      true
@@ -14,7 +14,7 @@ URxvt.internalBorder:   15
 
 !! Opacity --- load new changes by executing: xrdb -load ~/.Xdefaults
 URxvt.transparent:      true
-URxvt.shading:          15
+URxvt.shading:          25
 
 !! Mouse
 URxvt.pointerBlank:     true
@@ -97,9 +97,10 @@ URxvt.iso14755_52:            false
 #define nord13 #EBCB8B
 #define nord14 #A3BE8C
 #define nord15 #B48EAD
+#define nord16 #090E17
 
 *.foreground:   nord4
-*.background:   nord0
+*.background:   nord16
 *.cursorColor:  nord15
 *fading: 35
 *fadeColor: nord3
