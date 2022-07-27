@@ -87,7 +87,7 @@
             - { src: "{{ playbook_dir }}/nvim/.vimrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.vimrc" }
             - { src: "{{ playbook_dir }}/nvim/init.vim", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/nvim/init.vim" }
             - { src: "{{ playbook_dir }}/nvim/coc.vim", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/nvim/coc.vim" }
-            - { src: "{{ playbook_dir }}/nvim/profile.vim", dest: "/home/{{ ansible_env.SUDO_USER }}/.vim/colors/profile.vim" }
+            - { src: "{{ playbook_dir }}/nvim/colors/profile.vim", dest: "/home/{{ ansible_env.SUDO_USER }}/.vim/colors/profile.vim" }
             - { src: "{{ playbook_dir }}/x11/.Xdefaults", dest: "/home/{{ ansible_env.SUDO_USER }}/.Xdefaults" }
             - { src: "{{ playbook_dir }}/tmux/.tmux.conf", dest: "/home/{{ ansible_env.SUDO_USER }}/.tmux.conf" }
             - { src: "{{ playbook_dir }}/bash/.bashrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.bashrc" }
