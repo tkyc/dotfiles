@@ -14,7 +14,7 @@ URxvt.internalBorder:   15
 
 !! Opacity --- load new changes by executing: xrdb -load ~/.Xdefaults
 URxvt.transparent:      true
-URxvt.shading:          25
+URxvt.shading:          30
 
 !! Mouse
 URxvt.pointerBlank:     true
