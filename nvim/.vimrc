@@ -45,7 +45,10 @@ noremap <silent><esc> <esc>:noh<CR><esc>
 map <C-h> :nohlsearch <CR>
 inoremap ii <Esc>
 map <C-n> :NERDTreeToggle <CR>
-"set pastetoggle=<C-p>
+nnoremap <SPACE> <Nop>
+let mapleader=" "
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 
 
 
