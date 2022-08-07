@@ -49,6 +49,7 @@ nnoremap <SPACE> <Nop>
 let mapleader=" "
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>rr <cmd>CocRestart<cr><cr>
 
 
 
