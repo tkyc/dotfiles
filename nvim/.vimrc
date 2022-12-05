@@ -41,15 +41,24 @@ set cul
 
 
 "Key remaps and command macros
-noremap <silent><esc> <esc>:noh<CR><esc>
 map <C-h> :nohlsearch <CR>
-inoremap ii <Esc>
 map <C-n> :NERDTreeToggle <CR>
+map <Tab> :call TabKey()<CR>
+inoremap ii <Esc>
 nnoremap <SPACE> <Nop>
-let mapleader=" "
+let mapleader=" " "Leader key is spacebar
+noremap <silent><esc> <esc>:noh<CR><esc>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>rr <cmd>CocRestart<cr><cr>
+
+
+
+"Custom commands and functions
+command Tab :normal i    
+function TabKey()
+    execute "Tab"
+endfunction
 
 
 
