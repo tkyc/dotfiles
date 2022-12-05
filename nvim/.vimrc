@@ -56,8 +56,10 @@ nnoremap <leader>rr <cmd>CocRestart<cr><cr>
 
 "Custom commands and functions
 command Tab :normal i    
+command ToEndOfTab :normal l
 function TabKey()
     execute "Tab"
+    execute "ToEndOfTab"
 endfunction
 
 
