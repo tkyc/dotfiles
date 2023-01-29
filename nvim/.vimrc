@@ -48,8 +48,8 @@ inoremap ii <Esc>
 nnoremap <SPACE> <Nop>
 let mapleader=" " "Leader key is spacebar
 noremap <silent><esc> <esc>:noh<CR><esc>
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>ff <cmd>Telescope find_files hidden=true<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep hidden=true<cr>
 nnoremap <leader>rr <cmd>CocRestart<cr><cr>
 
 
