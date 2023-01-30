@@ -4,4 +4,6 @@
 pkill -f pulseaudio
 pkill -f xfconfd
 pkill -f at-spi2-registryd
+pkill -f jvm
+pkill -f xdg-*
 
