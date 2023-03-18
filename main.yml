@@ -54,6 +54,7 @@
             yes | pacman -S lsof
             yes | pacman -S tree
             yes | pacman -S curl
+            yes | pacman -S freerdp
             cd /home/{{ ansible_env.SUDO_USER }}/
         register: package_download_shell_output
       - debug:
