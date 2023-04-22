@@ -1,0 +1,30 @@
+"General settings
+"set noek "Uncomment if vim is booting in replace mode
+set number
+set relativenumber
+set hlsearch
+set encoding=utf8
+syntax enable
+
+
+
+"Indentation
+filetype plugin indent on
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
+
+
+"Row highlight in normal mode
+set cul
+:autocmd InsertEnter * set nocul
+:autocmd insertLeave * set cul
+
+
+
+"Key remaps and command macros
+noremap <silent><esc> <esc>:noh<CR><esc>
+map <C-h> :nohlsearch <CR>
+inoremap ii <Esc>
+
