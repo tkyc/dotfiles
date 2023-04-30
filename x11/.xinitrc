@@ -1,10 +1,14 @@
 # All settings must be set before start of window manager
 
+# Sets resolution for external output, if any
+~/Scripts/hdmi-on.sh
+
 # Sets background
 feh --bg-scale ~/Folder/backgrounds/bg8.png
 
 # Sets terminal settings
 xrdb -load ~/.Xdefaults
+
 
 # Disable screen saver
 xset s off
