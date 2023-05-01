@@ -1,4 +1,4 @@
 #!/bin/bash
 
-xrandr --output HDMI-2 --mode 1920x1080
+xrandr --output e-DP1 --off --output HDMI-2 --auto
 
