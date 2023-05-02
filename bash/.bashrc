@@ -29,7 +29,17 @@ export PATH=$PATH:/home/tkyc/Scripts
 export FZF_DEFAULT_COMMAND="find -L"
 
 # JAVA_HOME
-export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+export JAVA_HOME=~/Folder/jdk/jdk-19
+PATH=$JAVA_HOME/bin:$PATH
+
+# Path to current background
+export BACKGROUND=~/Folder/backgrounds/bg8.png
+
+# For running Intellij
+export _JAVA_AWT_WM_NONREPARENTING=1
+
+# Flutter
+export PATH="/opt/flutter/bin:$PATH"
 
 # Autocomplete shell commands after "sudo"
 complete -cf sudo

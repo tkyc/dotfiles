@@ -1,7 +1,7 @@
 # All settings must be set before start of window manager
 
 # Sets background
-feh --bg-scale ~/Folder/backgrounds/bg8.png
+feh --bg-scale $BACKGROUND
 
 # Sets terminal settings
 xrdb -load ~/.Xdefaults
