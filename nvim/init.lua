@@ -1,5 +1,6 @@
 require("config.lazy")
 require("config.lualine")
+require("config.tokyonight")
 
 -- Makes Neovim transparent
 vim.cmd [[
