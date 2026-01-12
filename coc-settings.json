@@ -1,9 +1,0 @@
-{
-    "codeLens.enable": true,
-    "java.referencesCodeLens.enabled": true,
-    "java.jdt.ls.vmargs": "-javaagent:/usr/local/share/lombok/lombok.jar",
-    "java.home": "/usr/lib/jvm/java-16-openjdk/jdk-16.0.1",
-    "java.project.referencedLibraries": [
-        "library/**/*.jar"
-    ]
-}

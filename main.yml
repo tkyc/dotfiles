@@ -5,168 +5,80 @@
   become: yes
 
   tasks:
-      - name: Perform system update
+      - name: Perform System Update
         shell: yes | pacman -Syu
-        register: system_update_shell_output
+        register: system_update_shell
       - debug:
-          msg: "{{ system_update_shell_output }}"
+          msg: "{{ system_update_shell }}"
 
-      - name: Installing system fonts
+      - name: Install Required Packages
         shell: |
-          yes | pacman -S ttf-dejavu ttf-liberation noto-fonts
-          cd /home/{{ ansible_env.SUDO_USER }}/
-          git clone https://aur.archlinux.org/nerd-fonts-inconsolata.git
-          git clone https://aur.archlinux.org/nerd-fonts-noto.git
-          chown {{ ansible_env.SUDO_USER }} nerd-fonts-inconsolata
-          chown {{ ansible_env.SUDO_USER }} nerd-fonts-noto
-          cd nerd-fonts-inconsolata/
-          yes | sudo -u {{ ansible_env.SUDO_USER }} makepkg -sirc
-          cd /home/{{ ansible_env.SUDO_USER }}
-          rm -rf nerd-fonts-inconsolata/
-          cd nerd-fonts-noto/
-          yes | sudo -u {{ ansible_env.SUDO_USER }} makepkg -sirc
-          cd /home/{{ ansible_env.SUDO_USER }}
-          rm -rf nerd-fonts-noto/
-          ln -s /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
-          ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
-          ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
-          echo 'export FREETYPE_PROPERTIES="truetype:interpreter-version=40"' > /etc/profile.d/freetype2.sh
-        register: system_fonts_install_shell_output
-      - debug:
-          msg: "{{ system_fonts_install_shell_output }}"
-
-      - name: Download required packages
-        shell: |
+            cd /home/{{ ansible_env.SUDO_USER }}/
             yes | pacman -S htop
-            yes | pacman -S alsa-utils
             yes | pacman -S fzf
             yes | pacman -S ripgrep
-            yes | pacman -S nodejs
-            yes | pacman -S feh
-            yes | pacman -S i3blocks
             yes | pacman -S tmux
-            yes | pacman -S rxvt-unicode
             yes | pacman -S openssh
             yes | pacman -S firefox
-            yes | pacman -S ttf-dejavu ttf-liberation noto-fonts
             yes | pacman -S cmake
             yes | pacman -S unzip zip
             yes | pacman -S lsof
             yes | pacman -S tree
             yes | pacman -S curl
-            cd /home/{{ ansible_env.SUDO_USER }}/
-        register: package_download_shell_output
+            yes | pacman -S less
+            yes | pacman -S vim
+            yes | pacman -S nvim
+            yes | pacman -S wayland
+            yes | pacman -S wayland-protocols
+            yes | pacman -S wlroots0.19
+            yes | pacman -S wl-clipboard
+            yes | pacman -S wlr-randr
+            yes | pacman -S foot
+            yes | pacman -S base-devel
+            yes | pacman -S grim
+            yes | pacman -S slurp
+            yes | pacman -S swaybg
+            yes | pacman -S swayimg
+            yes | pacman -S tllist
+            yes | pacman -S fcft
+            yes | pacman -S pixman
+            yes | pacman -S ttf-jetbrains-mono-nerd
+        register: system_install_required_packages
       - debug:
-          msg: "{{ package_download_shell_output }}"
+          msg: "{{ system_install_required_packages }}"
 
-      - name: Install neovim
+      - name: Create Dotfile Directories
         shell: |
-            cd /home/{{ ansible_env.SUDO_USER }}
-            git clone https://github.com/neovim/neovim
-            cd neovim/
-            make CMAKE_BUILD_TYPE=Release install
-            chown -R {{ ansible_env.SUDO_USER }}:users .cache/nvim/
-            rm -rf neovim/
-        register: neovim_install_shell_output
+            mkdir -p /home/{{ ansible_env.SUDO_USER }}/.config/foot
+            mkdir -p /home/{{ ansible_env.SUDO_USER }}/.config/nvim
+        register: system_create_dotfile_directories
       - debug:
-          msg: "{{ neovim_install_shell_output }}"
+          msg: "{{ system_create_dotfile_directories }}"
 
-      - name: Create config paths for neovim and terminal
-        shell: |
-            mkdir -p /home/{{ ansible_env.SUDO_USER }}/.vim/colors/
-            mkdir -p /home/{{ ansible_env.SUDO_USER }}/.config/nvim/
-            cd /home/{{ ansible_env.SUDO_USER }}/
-            git clone https://github.com/tkyc/tmux-themepack.git /home/{{ ansible_env.SUDO_USER }}/.tmux-themepack
-        register: neovim_and_terminal_config_paths_output
-      - debug:
-          msg: "{{ neovim_and_terminal_config_paths_output }}"
-
-      - name: Copy neovim and terminal configs to config directories
+      - name: Copy Dotfiles to Directories
         copy: src={{ item.src }} dest={{ item.dest }}
         with_items:
-            - { src: "{{ playbook_dir }}/.vimrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.vimrc" }
-            - { src: "{{ playbook_dir }}/init.vim", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/nvim/init.vim" }
-            - { src: "{{ playbook_dir }}/coc.vim", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/nvim/coc.vim" }
-            - { src: "{{ playbook_dir }}/profile.vim", dest: "/home/{{ ansible_env.SUDO_USER }}/.vim/colors/profile.vim" }
-            - { src: "{{ playbook_dir }}/.Xdefaults", dest: "/home/{{ ansible_env.SUDO_USER }}/.Xdefaults" }
-            - { src: "{{ playbook_dir }}/.tmux.conf", dest: "/home/{{ ansible_env.SUDO_USER }}/.tmux.conf" }
-            - { src: "{{ playbook_dir }}/.bashrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.bashrc" }
-            - { src: "{{ playbook_dir }}/.bash_profile", dest: "/home/{{ ansible_env.SUDO_USER }}/.bash_profile" }
-        register: copy_neovim_and_terminal_configs_output
+            - { src: "{{ playbook_dir }}/foot/foot.ini", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/foot/" }
+            - { src: "{{ playbook_dir }}/nvim/init.lua", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/nvim/" }
+        register: system_copy_dotfiles_to_directories
       - debug:
-          msg: "{{ copy_neovim_and_terminal_configs_output }}"
+          msg: "{{ system_copy_dotfiles_to_directories }}"
 
-      - name: Install vim-plug
+      - name: Git Clone dwl
         shell: |
-            mkdir -p /home/{{ ansible_env.SUDO_USER }}/.vim/autoload/
-            curl https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim > /home/{{ ansible_env.SUDO_USER }}/.vim/autoload/plug.vim
-        register: vim_plug_install_output
+            cd /home/{{ ansible_env.SUDO_USER }}/
+            cd ~/repo
+            git clone -b dwl https://github.com/tkyc/dwm.git
+        register: system_git_clone_dwl
       - debug:
-          msg: "{{ vim_plug_install_output }}"
+          msg: "{{ system_git_clone_dwl }}"
 
-      - name: Enable vim plugins
-        shell: nvim +PlugInstall +qall
-        register: pluginstall_output
-      - debug:
-          msg: "{{ pluginstall_output }}"
-
-      - name: Install Xorg display server
+      - name: Build dwl
         shell: |
-            yes | pacman -S --noconfirm xorg
-            yes | pacman -S --noconfirm xorg-xinit
-        register: xorg_install_shell_output
+            cd /home/{{ ansible_env.SUDO_USER }}/
+            cd ~/repo/dwl
+            sudo make clean install
+        register: system_build_dwl
       - debug:
-          msg: "{{ xorg_install_shell_output }}"
-      
-      - name: Install i3wm
-        shell: yes | pacman -S i3-gaps
-        register: i3wm_install_shell_output
-      - debug:
-          msg: "{{ i3wm_install_shell_output }}"
-      
-      - name: Enable i3wm
-        shell: |
-            mkdir -p /home/{{ ansible_env.SUDO_USER }}/Scripts/
-            mkdir -p /home/{{ ansible_env.SUDO_USER }}/Folder/backgrounds/
-            mkdir -p /home/{{ ansible_env.SUDO_USER }}/Repos/
-            mkdir -p /home/{{ ansible_env.SUDO_USER }}/.config/i3/
-            mkdir -p /home/{{ ansible_env.SUDO_USER }}/.config/gtk-3.0/
-      - debug:
-          msg: "Enabling i3wm"
+          msg: "{{ system_build_dwl }}"
 
-      - name: Copy i3wm config files to relevant directories
-        copy: src={{ item.src }} dest={{ item.dest }}
-        with_items:
-            - { src: "{{ playbook_dir }}/.xinitrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.xinitrc" }
-            - { src: "{{ playbook_dir }}/.i3blocks.conf", dest: "/home/{{ ansible_env.SUDO_USER }}/.i3blocks.conf" }
-            - { src: "{{ playbook_dir }}/config", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/i3/config" }
-            - { src: "{{ playbook_dir }}/scripts/", dest: "/home/{{ ansible_env.SUDO_USER }}/Scripts/" }
-            - { src: "{{ playbook_dir }}/backgrounds/", dest: "/home/{{ ansible_env.SUDO_USER }}/Folder/backgrounds/" }
-            - { src: "{{ playbook_dir }}/settings.ini", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/gtk-3.0/settings.ini" }
-        register: copy_i3wm_configs_output
-      - debug:
-          msg: "{{ copy_i3wm_configs_output }}"
-
-      - name: Find mozilla prefs.js file
-        shell: find /home/{{ ansible_env.SUDO_USER }}/.mozilla -iname prefs.js
-        register: prefs_path
-      - debug:
-          msg: "{{ prefs_path }}"
-
-      - name: Set firefox settings
-        shell: echo 'user_pref("ui.context_menus.after_mouseup", true);' >> {{ prefs_path }}
-        register: set_ff_settings_output
-      - debug:
-          msg: "{{ set_ff_settings_outputi }}"
-
-      - name: Change ownership of sudoer home to sudoer
-        shell: chown -R {{ ansible_env.SUDO_USER }}:users /home/{{ ansible_env.SUDO_USER }}/
-        register: chown_to_sudoer_output
-      - debug:
-          msg: "{{ chown_to_sudoer_output }}"
-
-      - name: Make shell scripts executable
-        shell: chmod -R +x /home/{{ ansible_env.SUDO_USER }}/Scripts/
-        register: chmod_exec_scripts_output
-      - debug:
-          msg: "{{ chmod_exec_scripts_output }}"
