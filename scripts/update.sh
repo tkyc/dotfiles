@@ -8,11 +8,8 @@ then
     user=$SUDO_USER
 fi
 
-# Update scripts
-cp /home/$user/scripts/* .
-
 # Update dotfiles
 cp /home/$user/.bashrc /home/$user/repo/dotfiles/bash/
-cp /home/$user/.vimrc /home/$user/repo/dotfiles/nvim/
 cp /home/$user/.config/nvim/init.lua /home/$user/repo/dotfiles/nvim/
+cp /home/$user/.config/foot/foot.ini /home/$user/repo/dotfiles/foot/
 

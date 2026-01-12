@@ -45,6 +45,10 @@
           - fcft
           - pixman
           - ttf-jetbrains-mono-nerd
+          - pipewire
+          - pipewire-pulse
+          - pipewire-alsa
+          - wireplumber
 
       - name: Create Config Directories
         shell: |
@@ -72,4 +76,12 @@
         register: system_build_dwl
       - debug:
           msg: "{{ system_build_dwl }}"
+
+      - name: Enable Audio
+        shell: |
+            systemctl --user enable pipewire.service pipewire-pulse.socket
+            systemctl --user start pipewire.service pipewire-pulse.socket
+        register: system_enable_audio
+      - debug:
+          msg: "{{ system_enable_audio }}"
 
