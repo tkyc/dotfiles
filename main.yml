@@ -6,10 +6,9 @@
 
   tasks:
       - name: Perform System Update
-        shell: yes | pacman -Syu
-        register: system_update_shell
-      - debug:
-          msg: "{{ system_update_shell }}"
+        pacman:
+          update_cache: yes
+          upgrade: yes
 
       - name: Install Required Packages
         pacman:
@@ -47,22 +46,16 @@
           - pixman
           - ttf-jetbrains-mono-nerd
 
-      - name: Create Dotfile Directories
+      - name: Create Config Directories
         shell: |
             mkdir -p /home/{{ ansible_env.SUDO_USER }}/.config/foot
             mkdir -p /home/{{ ansible_env.SUDO_USER }}/.config/nvim
-        register: system_create_dotfile_directories
-      - debug:
-          msg: "{{ system_create_dotfile_directories }}"
 
-      - name: Copy Dotfiles to Directories
+      - name: Copy Files to Directories
         copy: src={{ item.src }} dest={{ item.dest }}
         with_items:
             - { src: "{{ playbook_dir }}/foot/foot.ini", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/foot/" }
             - { src: "{{ playbook_dir }}/nvim/init.lua", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/nvim/" }
-        register: system_copy_dotfiles_to_directories
-      - debug:
-          msg: "{{ system_copy_dotfiles_to_directories }}"
 
       - name: Git Clone dwl
         git:

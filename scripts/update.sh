@@ -9,11 +9,10 @@ then
 fi
 
 # Update scripts
-cp /home/$user/Scripts/* .
+cp /home/$user/scripts/* .
 
 # Update dotfiles
-cp /home/$user/.bash_profile ../
-cp /home/$user/.bashrc ../
-cp /home/$user/.vimrc ../
-cp /home/$user/.config/nvim/init.lua ../
+cp /home/$user/.bashrc /home/$user/repo/dotfiles/bash/
+cp /home/$user/.vimrc /home/$user/repo/dotfiles/nvim/
+cp /home/$user/.config/nvim/init.lua /home/$user/repo/dotfiles/nvim/
 
