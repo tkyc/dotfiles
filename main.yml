@@ -65,17 +65,16 @@
           msg: "{{ system_copy_dotfiles_to_directories }}"
 
       - name: Git Clone dwl
-        shell: |
-            cd /home/{{ ansible_env.SUDO_USER }}/
-            cd ~/repo
-            git clone -b dwl https://github.com/tkyc/dwm.git
-        register: system_git_clone_dwl
-      - debug:
-          msg: "{{ system_git_clone_dwl }}"
+        git:
+          repo: https://github.com/tkyc/dotfiles.git
+          dest: /home/{{ ansible_env.SUDO_USER }}/repo/
+          version: dwl-profile
+          clone: yes
+          update: yes
 
       - name: Build dwl
         shell: |
-            cd /home/{{ ansible_env.SUDO_USER }}/
+            cd /home/{{ ansible_env.SUDO_USER }}
             cd ~/repo/dwl
             sudo make clean install
         register: system_build_dwl
