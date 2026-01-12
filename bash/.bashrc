@@ -3,7 +3,7 @@
 #
 
 # Personal shell scripts
-export PATH=$PATH:/home/tkyc/repo/dotfiles/scripts
+export PATH=$PATH:/home/$USER/repo/dotfiles/scripts
 
 # Terminal prompt display -- configure what is displayed on terminal prompt ex. directory, git branch, etc...
 colour='\[\e[36m\]'
