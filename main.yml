@@ -12,40 +12,40 @@
           msg: "{{ system_update_shell }}"
 
       - name: Install Required Packages
-        shell: |
-            cd /home/{{ ansible_env.SUDO_USER }}/
-            yes | pacman -S htop
-            yes | pacman -S fzf
-            yes | pacman -S ripgrep
-            yes | pacman -S tmux
-            yes | pacman -S openssh
-            yes | pacman -S firefox
-            yes | pacman -S cmake
-            yes | pacman -S unzip zip
-            yes | pacman -S lsof
-            yes | pacman -S tree
-            yes | pacman -S curl
-            yes | pacman -S less
-            yes | pacman -S vim
-            yes | pacman -S nvim
-            yes | pacman -S wayland
-            yes | pacman -S wayland-protocols
-            yes | pacman -S wlroots0.19
-            yes | pacman -S wl-clipboard
-            yes | pacman -S wlr-randr
-            yes | pacman -S foot
-            yes | pacman -S base-devel
-            yes | pacman -S grim
-            yes | pacman -S slurp
-            yes | pacman -S swaybg
-            yes | pacman -S swayimg
-            yes | pacman -S tllist
-            yes | pacman -S fcft
-            yes | pacman -S pixman
-            yes | pacman -S ttf-jetbrains-mono-nerd
-        register: system_install_required_packages
-      - debug:
-          msg: "{{ system_install_required_packages }}"
+        pacman:
+          name: "{{ item }}"
+          state: present
+        loop:
+          - htop
+          - fzf
+          - ripgrep
+          - tmux
+          - openssh
+          - firefox
+          - cmake
+          - unzip
+          - zip
+          - lsof
+          - tree
+          - curl
+          - less
+          - vim
+          - nvim
+          - wayland
+          - wayland-protocols
+          - wlroots0.19
+          - wl-clipboard
+          - wlr-randr
+          - foot
+          - base-devel
+          - grim
+          - slurp
+          - swaybg
+          - swayimg
+          - tllist
+          - fcft
+          - pixman
+          - ttf-jetbrains-mono-nerd
 
       - name: Create Dotfile Directories
         shell: |
