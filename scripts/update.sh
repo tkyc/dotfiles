@@ -10,6 +10,6 @@ fi
 
 # Update dotfiles
 cp /home/$user/.bashrc /home/$user/repo/dotfiles/bash/
-cp /home/$user/.config/nvim/init.lua /home/$user/repo/dotfiles/nvim/
+cp -r /home/$user/.config/nvim/ /home/$user/repo/dotfiles/
 cp /home/$user/.config/foot/foot.ini /home/$user/repo/dotfiles/foot/
 
