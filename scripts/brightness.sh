@@ -13,8 +13,8 @@ current_brightness=$(sudo cat /sys/class/backlight/${device}/brightness)
 val=$(($max_brightness / 10))
 
 # Increment and decrement
-inc="inc"
-dec="dec"
+inc="i"
+dec="d"
 
 if [ "$1" == "$inc" ];then
     echo $(($current_brightness + $val)) | sudo tee /sys/class/backlight/${device}/brightness;

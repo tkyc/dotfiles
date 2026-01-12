@@ -11,7 +11,7 @@
 # sudo iwlist wlan0 scan
 #
 # Use the following command to list network cards:
-# sudo ip link
+# sudo ip addr
 
 sudo ip link wlp3s0 set up
 sudo wpa_supplicant -B -i wlp3s0 -c /etc/wpa_supplicant.conf
