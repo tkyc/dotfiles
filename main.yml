@@ -22,6 +22,7 @@
           - openssh
           - firefox
           - cmake
+          - npm
           - unzip
           - zip
           - lsof
@@ -50,16 +51,15 @@
           - pipewire-alsa
           - wireplumber
 
-      - name: Create Config Directories
+      - name: Create Config Directory
         shell: |
-            mkdir -p /home/{{ ansible_env.SUDO_USER }}/.config/foot
-            mkdir -p /home/{{ ansible_env.SUDO_USER }}/.config/nvim
+            mkdir -p /home/{{ ansible_env.SUDO_USER }}/.config
 
       - name: Copy Files to Directories
         copy: src={{ item.src }} dest={{ item.dest }}
         with_items:
-            - { src: "{{ playbook_dir }}/foot/foot.ini", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/foot/" }
-            - { src: "{{ playbook_dir }}/nvim/init.lua", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/nvim/" }
+            - { src: "{{ playbook_dir }}/foot/", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/foot/" }
+            - { src: "{{ playbook_dir }}/nvim/", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/nvim/" }
 
       - name: Git Clone dwl
         git:
