@@ -18,6 +18,7 @@
           - htop
           - fzf
           - ripgrep
+          - fd
           - tmux
           - openssh
           - firefox
