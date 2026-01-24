@@ -61,6 +61,7 @@
         with_items:
             - { src: "{{ playbook_dir }}/foot/", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/foot/" }
             - { src: "{{ playbook_dir }}/nvim/", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/nvim/" }
+            - { src: "{{ playbook_dir }}/tmux/.tmux.conf", dest: "/home/{{ ansible_env.SUDO_USER }}/.tmux.conf" }
 
       - name: Git Clone dwl
         git:

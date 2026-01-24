@@ -12,4 +12,5 @@ fi
 cp /home/$user/.bashrc /home/$user/repo/dotfiles/bash/
 cp -r /home/$user/.config/nvim/ /home/$user/repo/dotfiles/
 cp /home/$user/.config/foot/foot.ini /home/$user/repo/dotfiles/foot/
+cp /home/$user/.tmux.conf /home/$user/repo/dotfiles/tmux/
 
