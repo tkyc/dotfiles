@@ -97,17 +97,5 @@
       - debug:
           msg: "{{ system_build_dwl }}"
 
-      - name: Enable Audio
-        ansible.builtin.systemd:
-          name: "{{ item }}"
-          enabled: yes
-          state: started
-          scope: user
-        loop:
-          - pipewire.service
-          - pipewire-pulse.socket
-        become: yes
-        become_user: "{{ target_user }}"
-        environment:
-          XDG_RUNTIME_DIR: "/run/user/{{ target_user_uid }}"
+      # TODO: Enable Audio
 
