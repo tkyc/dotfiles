@@ -74,6 +74,12 @@
             - { src: "{{ playbook_dir }}/bash/.bashrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.bashrc" }
             - { src: "{{ playbook_dir }}/tmux/.tmux.conf", dest: "/home/{{ ansible_env.SUDO_USER }}/.tmux.conf" }
 
+      - name: Install tree-sitter-cli (nvim)
+        community.general.npm:
+          name: tree-sitter-cli
+          global: true
+          state: latest
+
       - name: Git Clone dwl
         git:
           repo: https://github.com/tkyc/dwm.git
@@ -92,11 +98,16 @@
           msg: "{{ system_build_dwl }}"
 
       - name: Enable Audio
-        shell: |
-            ./home/{{ ansible_env.SUDO_USER }}/repo/script/start.sh
-            systemctl --user enable pipewire.service pipewire-pulse.socket
-            systemctl --user start pipewire.service pipewire-pulse.socket
-        register: system_enable_audio
-      - debug:
-          msg: "{{ system_enable_audio }}"
+        ansible.builtin.systemd:
+          name: "{{ item }}"
+          enabled: yes
+          state: started
+          scope: user
+        loop:
+          - pipewire.service
+          - pipewire-pulse.socket
+        become: yes
+        become_user: "{{ target_user }}"
+        environment:
+          XDG_RUNTIME_DIR: "/run/user/{{ target_user_uid }}"
 
