@@ -1,5 +1,5 @@
 ---
-- name: Configure arch linux development environment
+- name: Configure linux development environment
   hosts: localhost
   connection: local
   become: yes
@@ -70,6 +70,8 @@
         with_items:
             - { src: "{{ playbook_dir }}/foot/", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/foot/" }
             - { src: "{{ playbook_dir }}/nvim/", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/nvim/" }
+            - { src: "{{ playbook_dir }}/nvim/.vimrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.vimrc" }
+            - { src: "{{ playbook_dir }}/bash/.bashrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.bashrc" }
             - { src: "{{ playbook_dir }}/tmux/.tmux.conf", dest: "/home/{{ ansible_env.SUDO_USER }}/.tmux.conf" }
 
       - name: Git Clone dwl
@@ -91,6 +93,7 @@
 
       - name: Enable Audio
         shell: |
+            ./home/{{ ansible_env.SUDO_USER }}/repo/script/start.sh
             systemctl --user enable pipewire.service pipewire-pulse.socket
             systemctl --user start pipewire.service pipewire-pulse.socket
         register: system_enable_audio
