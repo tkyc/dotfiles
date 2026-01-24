@@ -53,11 +53,18 @@
           - wireplumber
 
       - name: Create Config Directory
-        shell: |
-            mkdir -p /home/{{ ansible_env.SUDO_USER }}/.config
+        ansible.builtin.file:
+          path: /home/{{ ansible_env.SUDO_USER }}/.config
+          state: directory
+          owner: "{{ ansible_env.SUDO_USER }}"
+          group: "{{ ansible_env.SUDO_USER }}"
+          mode: "0755"
 
       - name: Copy Files to Directories
         copy: src={{ item.src }} dest={{ item.dest }}
+          owner: "{{ ansible_env.SUDO_USER }}"
+          group: "{{ ansible_env.SUDO_USER }}"
+          mode: "{{ item.mode | default('0755') }}"
         with_items:
             - { src: "{{ playbook_dir }}/foot/", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/foot/" }
             - { src: "{{ playbook_dir }}/nvim/", dest: "/home/{{ ansible_env.SUDO_USER }}/.config/nvim/" }
@@ -70,6 +77,7 @@
           version: dwl
           clone: yes
           update: yes
+        become_user: "{{ ansible_env.SUDO_USER }}"
 
       - name: Build dwl
         shell: |
