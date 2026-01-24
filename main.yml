@@ -61,7 +61,9 @@
           mode: "0755"
 
       - name: Copy Files to Directories
-        copy: src={{ item.src }} dest={{ item.dest }}
+        copy: 
+          src: "{{ item.src }}"
+          dest: "{{ item.dest }}"
           owner: "{{ ansible_env.SUDO_USER }}"
           group: "{{ ansible_env.SUDO_USER }}"
           mode: "{{ item.mode | default('0755') }}"
