@@ -84,16 +84,16 @@
 
       - name: Git Clone dwl
         git:
-          repo: https://github.com/tkyc/dwm.git
-          dest: /home/{{ ansible_env.SUDO_USER }}/repo/dwm
-          version: dwl
+          repo: https://github.com/tkyc/dwl.git
+          dest: /home/{{ ansible_env.SUDO_USER }}/repo/dwl
+          version: main
           clone: yes
           update: yes
         become_user: "{{ ansible_env.SUDO_USER }}"
 
       - name: Build dwl
         shell: |
-            cd /home/{{ ansible_env.SUDO_USER }}/repo/dwm
+            cd /home/{{ ansible_env.SUDO_USER }}/repo/dwl
             make clean install
         register: system_build_dwl
       - debug:
