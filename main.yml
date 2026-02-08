@@ -33,6 +33,7 @@
           - vim
           - nvim
           - mpv
+          - gammastep
           - wayland
           - wayland-protocols
           - wlroots0.19
