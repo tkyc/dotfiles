@@ -32,11 +32,13 @@
           - less
           - vim
           - nvim
+          - mpv
           - wayland
           - wayland-protocols
           - wlroots0.19
           - wl-clipboard
           - wlr-randr
+          - wf-recorder
           - foot
           - base-devel
           - grim
