@@ -55,6 +55,13 @@
           - pipewire-alsa
           - wireplumber
 
+      - name: Miscellaneous Environment Setup
+        shell: |
+            git config --global core.editor "nvim"
+        register: system_run_misc_commands
+      - debug:
+          msg: "{{ system_run_misc_commands }}"
+
       - name: Create Config Directory
         ansible.builtin.file:
           path: /home/{{ ansible_env.SUDO_USER }}/.config
