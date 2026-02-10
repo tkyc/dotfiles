@@ -6,7 +6,7 @@
 
 3. Run the ansible playbook <br>
 
-`sudo ansible-playbook main.yml --ask-become-pass`
+   `sudo ansible-playbook main.yml --ask-become-pass`
 
 # Misc.
  Run the following to update packages only:<br>
