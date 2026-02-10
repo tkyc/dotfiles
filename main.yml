@@ -56,6 +56,8 @@
           - pipewire-pulse
           - pipewire-alsa
           - wireplumber
+        tags:
+          - install_packages
 
       - name: Miscellaneous Environment Setup
         shell: |

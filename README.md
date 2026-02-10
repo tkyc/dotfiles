@@ -6,3 +6,7 @@
 
 3. sudo ansible-playbook main.yml --ask-become-pass
 
+# Misc.
+- To update packages only, run the following:
+`sudo ansible-playbook main.yml --tags install_packages`
+
