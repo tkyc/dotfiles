@@ -29,6 +29,7 @@
           - zip
           - lsof
           - netcat
+          - tcpdump
           - tree
           - curl
           - less
