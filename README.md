@@ -4,9 +4,9 @@
 
 2. Clone this repository into ~/repo
 
-3. sudo ansible-playbook main.yml --ask-become-pass
+3. `sudo ansible-playbook main.yml --ask-become-pass`
 
 # Misc.
-- To update packages only, run the following:
+- Run the following to update packages only:<br>
 `sudo ansible-playbook main.yml --tags install_packages`
 
