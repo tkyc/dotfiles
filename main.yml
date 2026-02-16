@@ -65,6 +65,8 @@
         shell: |
             git config --global core.editor "nvim"
             usermod -aG wireshark $USER
+        tags:
+          - misc_env_setup 
         register: system_run_misc_commands
       - debug:
           msg: "{{ system_run_misc_commands }}"

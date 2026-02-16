@@ -13,3 +13,7 @@
 
 `sudo ansible-playbook main.yml --tags install_packages`
 
+ Run the following to execute miscellaneous environment setup commands:<br>
+
+`sudo ansible-playbook main.yml --tags misc_env_setup`
+
