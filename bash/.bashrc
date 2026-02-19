@@ -5,6 +5,11 @@
 # Personal shell scripts
 export PATH=$PATH:/home/$USER/repo/dotfiles/scripts
 
+# Java
+export JAVA_HOME=/home/$USER/java/jdk-25
+export PATH=/home/$USER/java/jdk-25/bin:$PATH
+export PATH=/home/$USER/java/mvn/bin:$PATH
+
 # Terminal prompt display -- configure what is displayed on terminal prompt ex. directory, git branch, etc...
 colour='\[\e[36m\]'
 no_colour='\[\e[0m\]'
