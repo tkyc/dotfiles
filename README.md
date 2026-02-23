@@ -17,3 +17,7 @@
 
 `sudo ansible-playbook main.yml --tags misc_env_setup`
 
+ Run the following to update dotfiles:<br>
+
+`sudo ansible-playbook main.yml --tags update_dotfiles`
+

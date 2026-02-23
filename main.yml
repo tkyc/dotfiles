@@ -38,6 +38,7 @@
           - nvim
           - mpv
           - gammastep
+          - graphviz
           - wayland
           - wayland-protocols
           - wlroots0.19
@@ -65,8 +66,9 @@
         shell: |
             git config --global core.editor "nvim"
             usermod -aG wireshark $USER
+            chown -R $USER:$USER /home/{{ ansible_env.SUDO_USER }}/repo/dotfiles
         tags:
-          - misc_env_setup 
+          - misc_env_setup
         register: system_run_misc_commands
       - debug:
           msg: "{{ system_run_misc_commands }}"
@@ -92,6 +94,8 @@
             - { src: "{{ playbook_dir }}/nvim/.vimrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.vimrc" }
             - { src: "{{ playbook_dir }}/bash/.bashrc", dest: "/home/{{ ansible_env.SUDO_USER }}/.bashrc" }
             - { src: "{{ playbook_dir }}/tmux/.tmux.conf", dest: "/home/{{ ansible_env.SUDO_USER }}/.tmux.conf" }
+        tags:
+          - update_dotfiles
 
       - name: Install tree-sitter-cli (nvim)
         community.general.npm:
