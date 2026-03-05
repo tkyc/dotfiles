@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# To enable, add the configuration below to /etc/iwd/main.conf
+# To enable wifi, add the configuration (lines 2-3) below to /etc/iwd/main.conf
 #
 # [General]
 # EnableNetworkConfiguration=true
