@@ -3,10 +3,10 @@ require('nvim-treesitter').setup {
   install_dir = vim.fn.stdpath('data') .. '/site'
 }
 
-require('nvim-treesitter').install { "java" }
+require('nvim-treesitter').install { "java", "cpp" }
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'java' },
+  pattern = { 'java', 'cpp' },
   callback = function() vim.treesitter.start() end,
 })
 
