@@ -98,10 +98,12 @@
           - update_dotfiles
 
       - name: Install tree-sitter-cli (nvim)
-        community.general.npm:
-          name: tree-sitter-cli
-          global: true
-          state: latest
+        ansible.builtin.command:
+          cmd: npm install -g --allow-scripts=tree-sitter-cli tree-sitter-cli
+        become: true
+        changed_when: true
+        tags:
+          - install_tree_sitter_cli
 
       - name: Git Clone dwl
         git:
@@ -121,4 +123,3 @@
           msg: "{{ system_build_dwl }}"
 
       # TODO: Enable Audio
-
