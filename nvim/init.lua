@@ -1,4 +1,5 @@
 require("config.lazy")
+require("config.mason")
 require("config.lualine")
 require("config.tokyonight")
 require("config.treesitter")
