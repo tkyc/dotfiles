@@ -8,10 +8,12 @@ local theme = 'ivy'
 require('telescope').setup {
     pickers = {
         find_files = {
-          theme = theme
+          theme = theme,
+          layout_config = { height = 0.99 },
         },
         live_grep = {
-          theme = theme
+          theme = theme,
+          layout_config = { height = 0.99 },
         },
         buffers = {
           theme = theme
