@@ -1,4 +1,6 @@
-require('mason').setup()
+require('mason').setup({
+  ui = { border = "single" },
+})
 
 require('mason-lspconfig').setup({
   ensure_installed = { 'jdtls', 'clangd' },

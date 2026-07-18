@@ -7,7 +7,7 @@ require("config.telescope")
 require("config.blink")
 require("config.gitsigns")
 
--- Colourscheme
+-- Colour scheme
 vim.cmd [[
     colorscheme tokyonight-night
 ]]
@@ -59,4 +59,7 @@ vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.o.expandtab = true
 vim.o.softtabstop = 4
+
+-- Border for floating windows (LSP hover, diagnostics, etc...)
+vim.o.winborder = "single"
 
