@@ -47,6 +47,9 @@
           - wlr-randr
           - wf-recorder
           - foot
+          - kmscon
+          - pango
+          - fontconfig
           - base-devel
           - grim
           - slurp
@@ -86,7 +89,7 @@
           group: "{{ ansible_env.SUDO_USER }}"
           mode: "0755"
 
-      - name: Copy Files to Directories
+      - name: Copy Dotfiles to Directories
         copy: 
           src: "{{ item.src }}"
           dest: "{{ item.dest }}"
@@ -101,6 +104,42 @@
             - { src: "{{ playbook_dir }}/tmux/.tmux.conf", dest: "/home/{{ ansible_env.SUDO_USER }}/.tmux.conf" }
         tags:
           - update_dotfiles
+
+      - name: Create /etc/kmscon Directory
+        ansible.builtin.file:
+          path: /etc/kmscon
+          state: directory
+          owner: root
+          group: root
+          mode: "0755"
+        tags:
+          - kmscon_setup
+
+      - name: Copy kmscon Config
+        ansible.builtin.copy:
+          src: "{{ playbook_dir }}/kmscon/kmscon.conf"
+          dest: /etc/kmscon/kmscon.conf
+          owner: root
+          group: root
+          mode: "0644"
+        tags:
+          - kmscon_setup
+
+      - name: Configure kmscon Auto-launch on TTY Login
+        ansible.builtin.blockinfile:
+          path: "/home/{{ ansible_env.SUDO_USER }}/.bash_profile"
+          create: yes
+          owner: "{{ ansible_env.SUDO_USER }}"
+          group: "{{ ansible_env.SUDO_USER }}"
+          mode: "0644"
+          block: |
+            # Auto-launch kmscon (Nerd Font rendering) on bare TTY login
+            if [[ $(tty) == /dev/tty[0-9]* ]] && [ -z "$KMSCON" ]; then
+                export KMSCON=1
+                exec kmscon
+            fi
+        tags:
+          - kmscon_setup
 
       - name: Install tree-sitter-cli (nvim)
         ansible.builtin.command:
@@ -128,3 +167,4 @@
           msg: "{{ system_build_dwl }}"
 
       # TODO: Enable Audio
+
