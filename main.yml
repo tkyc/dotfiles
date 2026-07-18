@@ -48,8 +48,6 @@
           - wf-recorder
           - foot
           - kmscon
-          - pango
-          - fontconfig
           - base-devel
           - grim
           - slurp
@@ -125,19 +123,10 @@
         tags:
           - kmscon_setup
 
-      - name: Configure kmscon Auto-launch on TTY Login
-        ansible.builtin.blockinfile:
-          path: "/home/{{ ansible_env.SUDO_USER }}/.bash_profile"
-          create: yes
-          owner: "{{ ansible_env.SUDO_USER }}"
-          group: "{{ ansible_env.SUDO_USER }}"
-          mode: "0644"
-          block: |
-            # Auto-launch kmscon (Nerd Font rendering) on bare TTY login
-            if [[ $(tty) == /dev/tty[0-9]* ]] && [ -z "$KMSCON" ]; then
-                export KMSCON=1
-                exec kmscon
-            fi
+      - name: Enable kmscon On tty2
+        ansible.builtin.systemd:
+          name: kmsconvt@tty2.service
+          enabled: yes
         tags:
           - kmscon_setup
 
