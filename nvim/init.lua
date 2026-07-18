@@ -7,12 +7,8 @@ require("config.telescope")
 require("config.blink")
 require("config.gitsigns")
 
--- Transparency
+-- Colourscheme
 vim.cmd [[
-    highlight Normal guibg=none
-    highlight NonText guibg=none
-    highlight Normal ctermbg=none
-    highlight NonText ctermbg=none
     colorscheme tokyonight-night
 ]]
 
@@ -48,6 +44,8 @@ local function clear_search_highlight()
 end
 
 vim.keymap.set('n', '<C-h>', clear_search_highlight, { desc = 'Clear search highlights' })
+
+vim.opt.signcolumn = "yes"
 
 -- Set leader key to spacebar
 vim.g.mapleader = ' '

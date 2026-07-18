@@ -33,3 +33,4 @@ require('gitsigns').setup({
     map('n', '<leader>hd', gitsigns.diffthis, { desc = 'Gitsigns: Diff this' })
   end,
 })
+
