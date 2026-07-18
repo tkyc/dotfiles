@@ -5,6 +5,7 @@ require("config.tokyonight")
 require("config.treesitter")
 require("config.telescope")
 require("config.blink")
+require("config.gitsigns")
 
 -- Transparency
 vim.cmd [[
