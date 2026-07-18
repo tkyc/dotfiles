@@ -55,6 +55,10 @@
           - fcft
           - pixman
           - ttf-jetbrains-mono-nerd
+          - noto-fonts
+          - noto-fonts-cjk
+          - noto-fonts-emoji
+          - noto-fonts-extra
           - pipewire
           - pipewire-pulse
           - pipewire-alsa
