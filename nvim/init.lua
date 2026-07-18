@@ -29,6 +29,19 @@ vim.api.nvim_create_user_command(
   }
 )
 
+-- Preview .md file
+local function preview_markdown()
+  vim.cmd('term glow -w 150 %')
+end
+
+vim.api.nvim_create_user_command(
+  'PreviewMarkdown',
+  preview_markdown,
+  {
+    desc = 'Preview markdown file'
+  }
+)
+
 -- Clear search highlight
 local function clear_search_highlight()
     vim.cmd('nohlsearch')
