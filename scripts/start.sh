@@ -1,5 +1,5 @@
 #!/bin/bash
 
 # Start dwl and apply background wallpaper
-dwl -s "sh -c 'swaybg -i ~/repo/dotfiles/backgrounds/03.jpg &'"
+dwl -s "sh -c 'swaybg -i ~/repo/dotfiles/backgrounds/03.jpg & foot --fullscreen &'"
 
