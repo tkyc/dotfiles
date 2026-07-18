@@ -42,5 +42,7 @@ server later installed through `:Mason`, since `automatic_enable = true`.
 
 ## Commands
 
-`:ClearMarks` — runs `delmarks! | delmarks A-Z 0-9`. Defined in `init.lua`, no key bound.
+`:ClearMarks` — runs `delmarks! | delmarks A-Z 0-9`.
+
+`:PreviewMarkdown` — runs `term glow -w 150 %`.
 
