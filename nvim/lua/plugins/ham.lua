@@ -1,7 +1,7 @@
 -- ham: Google AI Mode inside Neovim (local plugin)
 return {
   {
-    dir = "/home/tkyc/repo/ham",
+    dir = "/home/tkyc/repo/ham.nvim",
     name = "ham",
     -- Install the Node backend dependency (puppeteer-core) on install/update.
     build = "cd backend && npm install",
