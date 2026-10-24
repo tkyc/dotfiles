@@ -27,6 +27,7 @@ horizontal rules (***, ---, ___), GitHub pipe tables and HTML <table>.
 """
 
 import re
+import html
 import argparse
 
 # ---------------------------------------------------------------- font metrics
@@ -266,49 +267,130 @@ def draw_flow(runs, x_left, max_w, size, leading, color, first_indent=0.0):
         flush()
 
 # ---------------------------------------------------------------- tables
+_BOLDER = {"reg": "bold", "ital": "bolditalic"}
+
+# Column widths are computed as (inner + 2*padx) and later reduced by 2*padx, so a
+# word exactly as wide as its column can come back a hair too wide from float rounding.
+FIT_EPS = 0.01
+
+def split_long_word(word, max_w, size):
+    """Break a word wider than max_w into character chunks that each fit."""
+    if max_w <= 0 or word_width(word, size) <= max_w + FIT_EPS:
+        return [word]
+    pieces, piece, pw = [], [], 0.0
+    for frag, st in word:
+        buf = ""
+        for ch in frag:
+            cw = text_w(ch, st, size)
+            if pw + cw > max_w + FIT_EPS and (piece or buf):
+                if buf:
+                    piece.append((buf, st)); buf = ""
+                pieces.append(piece); piece, pw = [], 0.0
+            buf += ch; pw += cw
+        if buf:
+            piece.append((buf, st))
+    if piece:
+        pieces.append(piece)
+    return pieces
+
+def wrap_words(words, max_w, size):
+    """Wrap a cell's words (BREAK = forced newline) into lines that fit max_w."""
+    space_w = text_w(" ", "reg", size)
+    lines, line_w = [[]], 0.0
+    for word in words:
+        if word is BREAK:
+            lines.append([]); line_w = 0.0
+            continue
+        for piece in split_long_word(word, max_w, size):
+            pw = word_width(piece, size)
+            if lines[-1] and line_w + space_w + pw > max_w + FIT_EPS:
+                lines.append([]); line_w = 0.0
+            if lines[-1]:
+                line_w += space_w
+            lines[-1].append(piece); line_w += pw
+    return lines
+
+def draw_words(line, x, yy, size, color):
+    """Draw one wrapped line of styled words starting at x."""
+    space_w = text_w(" ", "reg", size)
+    xx = x
+    for wi, word in enumerate(line):
+        if wi > 0:
+            xx += space_w
+        for frag, st in word:
+            fw = text_w(frag, st, size)
+            if st == "mono":
+                fillrect(xx - 1.0, yy - 2.5, fw + 2.0, size + 1.5, CODE_BG)
+            show(xx, yy, frag, st, size, frag_color(st, color))
+            xx += fw
+
+def column_widths(cell_rows, ncol, size, padx):
+    """Auto table layout: each column gets at least its longest word, and leftover
+    space goes to columns in proportion to how much wider their text wants to be."""
+    space_w = text_w(" ", "reg", size)
+    nat = [0.0] * ncol      # widest line if nothing wrapped
+    mn = [0.0] * ncol       # widest single word
+    for cells in cell_rows:
+        for i, words in enumerate(cells[:ncol]):
+            line_w, first = 0.0, True
+            for word in words:
+                if word is BREAK:
+                    nat[i] = max(nat[i], line_w); line_w, first = 0.0, True
+                    continue
+                ww = word_width(word, size)
+                mn[i] = max(mn[i], ww)
+                line_w += ww if first else space_w + ww
+                first = False
+            nat[i] = max(nat[i], line_w)
+    avail = CW - 2 * padx * ncol
+    if sum(nat) <= avail:
+        inner = nat
+    elif sum(mn) >= avail:
+        tot = sum(mn)
+        inner = [m * avail / tot for m in mn] if tot else [avail / ncol] * ncol
+    else:
+        extra = avail - sum(mn)
+        flex = [n - m for n, m in zip(nat, mn)]
+        tf = sum(flex)
+        inner = [m + (extra * f / tf if tf else extra / ncol) for m, f in zip(mn, flex)]
+    return [w + 2 * padx for w in inner]
+
 def render_table(headers, rows):
-    """headers: list of cells (or []); each cell is a list[str] of lines.
-    rows: list of ('data', [cells]) or ('span', text). Cells may be multi-line (via <br>)."""
+    """headers: list of cells (or []); each cell is a list of words from cell_words().
+    rows: list of ('data', [cells]) or ('span', text). Cell text wraps to its column,
+    keeps inline styles (bold, italic, code, links) and honors <br> line breaks."""
     global y
     ncol = len(headers) if headers else max((len(r[1]) for r in rows if r[0] == "data"), default=1)
     size = 9.5; padx = 7.0; base = 17.0; lh = 12.0
-    widths = [0.0] * ncol
-
-    def consider(cells):
-        for i, c in enumerate(cells[:ncol]):
-            widths[i] = max(widths[i], max((text_w(ln, "reg", size) for ln in c), default=0.0))
-    if headers:
-        consider(headers)
-    for r in rows:
-        if r[0] == "data":
-            consider(r[1])
-    widths = [w + 2 * padx for w in widths]
+    headers = [[w if w is BREAK else [(f, _BOLDER.get(st, st)) for f, st in w] for w in c]
+               for c in headers]
+    widths = column_widths(([headers] if headers else []) + [r[1] for r in rows if r[0] == "data"],
+                           ncol, size, padx)
     total = sum(widths)
-    if total > CW:
-        scale = CW / total
-        widths = [w * scale for w in widths]
-        total = CW
     offs = []; acc = 0.0
     for w in widths:
         offs.append(acc); acc += w
     x0 = ML
 
+    def wrap_row(cells):
+        return [wrap_words(cells[i], widths[i] - 2 * padx, size) if i < len(cells) else [[]]
+                for i in range(ncol)]
+
     def row_height(cells):
-        return base + (max((len(c) for c in cells), default=1) - 1) * lh
+        return base + (max(len(c) for c in wrap_row(cells)) - 1) * lh
 
     def draw_cells(cells, bold=False, bg=None):
         global y
-        rh = row_height(cells)
+        wrapped = wrap_row(cells)
+        rh = base + (max(len(c) for c in wrapped) - 1) * lh
         if bg:
             fillrect(x0, y - rh + 4, total, rh, bg)
         for i in range(ncol):
             strokerect(x0 + offs[i], y - rh + 4, widths[i], rh, TBORDER)
-            if i < len(cells):
-                yy = y - 8
-                for ln in cells[i]:
-                    show(x0 + offs[i] + padx, yy, ln, "bold" if bold else "reg",
-                         size, HEAD if bold else BODY)
-                    yy -= lh
+            yy = y - 8
+            for line in wrapped[i]:
+                draw_words(line, x0 + offs[i] + padx, yy, size, HEAD if bold else BODY)
+                yy -= lh
         y -= rh
 
     if headers:
@@ -356,6 +438,18 @@ def cell_lines(raw):
     """Split a table cell into display lines, honoring <br> (so it isn't just stripped)."""
     t = strip_tags(_BR_RE.sub(NUL, raw))
     return [seg.strip() for seg in t.split(NUL)]
+
+_HTML_INLINE = [("<strong>", "**"), ("</strong>", "**"), ("<b>", "**"), ("</b>", "**"),
+                ("<em>", "*"), ("</em>", "*"), ("<i>", "*"), ("</i>", "*"),
+                ("<code>", "`"), ("</code>", "`")]
+
+def cell_words(raw):
+    """Parse a table cell into styled words, keeping inline markup and <br> breaks."""
+    s = _BR_RE.sub(NUL, raw)
+    for tag, md in _HTML_INLINE:
+        s = s.replace(tag, md)
+    s = html.unescape(strip_tags(s)).strip()
+    return words_from_runs(parse_inline(s))
 
 # ---------------------------------------------------------------- block parser
 def is_delim_row(s):
@@ -435,14 +529,14 @@ def render_markdown(text):
             while i < n and "</table>" not in lines[i]:
                 row = lines[i].strip()
                 if "<th>" in row:
-                    headers = [cell_lines(c) for c in re.findall(r"<th[^>]*>(.*?)</th>", row)]
+                    headers = [cell_words(c) for c in re.findall(r"<th[^>]*>(.*?)</th>", row)]
                 elif "<td" in row:
                     if "colspan" in row:
                         cell = re.findall(r"<td[^>]*>(.*?)</td>", row)
                         rows.append(("span", " ".join(cell_lines(cell[0])) if cell else ""))
                     else:
                         cells = re.findall(r"<td[^>]*>(.*?)</td>", row)
-                        rows.append(("data", [cell_lines(c) for c in cells]))
+                        rows.append(("data", [cell_words(c) for c in cells]))
                 i += 1
             i += 1  # skip </table>
             y -= 4
@@ -452,11 +546,11 @@ def render_markdown(text):
 
         # GitHub pipe table
         if "|" in s and i + 1 < n and is_delim_row(lines[i + 1]):
-            headers = [cell_lines(c) for c in s.strip().strip("|").split("|")]
+            headers = [cell_words(c) for c in s.strip().strip("|").split("|")]
             i += 2
             rows = []
             while i < n and "|" in lines[i] and lines[i].strip():
-                cells = [cell_lines(c) for c in lines[i].strip().strip("|").split("|")]
+                cells = [cell_words(c) for c in lines[i].strip().strip("|").split("|")]
                 rows.append(("data", cells))
                 i += 1
             y -= 4
