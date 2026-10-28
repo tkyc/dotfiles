@@ -64,7 +64,11 @@ def text_w(s, style, size):
     return sum(char_w(c, style) for c in s) * size / 1000.0
 
 # ---------------------------------------------------------------- style tokens
-ML, MR, MT, MB = 58.0, 58.0, 60.0, 56.0     # page margins
+ML, MR, MT, MB = 58.0, 58.0, 56.0, 56.0     # page margins
+GAP      = 10.0     # space between text blocks (paragraphs, lists)
+BOX_GAP  = 13.0     # space around boxed blocks (tables, code). Text line boxes already
+                    # carry half-leading above and below, so boxes get a bit more.
+ASC, DESC = 0.718, 0.207                    # Helvetica ascent/descent, fraction of size
 BODY     = (0.20, 0.22, 0.25)
 HEAD     = (0.09, 0.11, 0.13)
 RULE     = (0.86, 0.88, 0.90)
@@ -82,11 +86,12 @@ PAGE_W = 612.0
 CW = PAGE_W - ML - MR
 PAGINATE = False
 PAGE_H = 792.0
-TOP = -(MT + 8.0)
+TOP = -MT
 
 cur = []        # PDF content operators for the page being built
 PAGES = []      # list of (ops, page_height)
-y = TOP         # cursor; 0 is the top of the page, growing negative downward
+y = TOP         # cursor: top edge of the next block; 0 is the top of the page, growing negative downward
+gap = 0.0       # bottom margin of the previous block, still to be applied
 
 def emit(s):
     cur.append(s)
@@ -117,22 +122,41 @@ def rule(x1, yy, x2, color, lw=0.8):
     emit("%.3f %.3f %.3f RG" % (r, g, b))
     emit("%.2f w %.2f %.2f m %.2f %.2f l S" % (lw, x1, yy, x2, yy))
 
-def disc(cx, cy, rad, color):
+def disc(cx, cy, rad, color, hollow=False):
     r, g, b = color
     k = 0.5523 * rad
-    emit("%.3f %.3f %.3f rg" % (r, g, b))
+    if hollow:
+        emit("%.3f %.3f %.3f RG 0.7 w" % (r, g, b))
+    else:
+        emit("%.3f %.3f %.3f rg" % (r, g, b))
     emit("%.2f %.2f m" % (cx + rad, cy))
     emit("%.2f %.2f %.2f %.2f %.2f %.2f c" % (cx + rad, cy + k, cx + k, cy + rad, cx, cy + rad))
     emit("%.2f %.2f %.2f %.2f %.2f %.2f c" % (cx - k, cy + rad, cx - rad, cy + k, cx - rad, cy))
     emit("%.2f %.2f %.2f %.2f %.2f %.2f c" % (cx - rad, cy - k, cx - k, cy - rad, cx, cy - rad))
     emit("%.2f %.2f %.2f %.2f %.2f %.2f c" % (cx + k, cy - rad, cx + rad, cy - k, cx + rad, cy))
-    emit("f")
+    emit("S" if hollow else "f")
 
 def finish_page(h):
     global cur, y
     PAGES.append((cur[:], h))
     cur.clear()
     y = TOP
+
+def block_start(mt):
+    """Open a block: move down by the larger of the previous block's bottom margin and
+    this block's top margin (margins collapse, as in CSS). No margin at the top of a page."""
+    global y, gap
+    if y < TOP:
+        y -= max(gap, mt)
+    gap = 0.0
+
+def block_end(mb):
+    global gap
+    gap = mb
+
+def baseline_off(size, leading):
+    """Distance from the top of a line box down to the baseline, glyphs centered in the box."""
+    return (leading - (ASC + DESC) * size) / 2.0 + ASC * size
 
 def need(h):
     """In paginate mode, break to a new page if h points won't fit. Returns True if it broke."""
@@ -158,8 +182,12 @@ _INLINE = re.compile(
     r"|(?<!\w)_(?P<i2>[^_]+?)_(?!\w)"
 )
 
+# style of an inner run once it is wrapped in bold / italic (code and links keep theirs)
+_IN_BOLD = {"reg": "bold", "ital": "bolditalic"}
+_IN_ITAL = {"reg": "ital", "bold": "bolditalic"}
+
 def parse_inline(s):
-    """Return a list of (text, style) runs. style in reg/bold/ital/mono/link/break."""
+    """Return a list of (text, style) runs. style in reg/bold/ital/bolditalic/mono/link/break."""
     s = s.replace("<em>", "*").replace("</em>", "*")
     s = s.replace("<strong>", "**").replace("</strong>", "**")
     s = _BR_RE.sub(NUL, s)             # <br> variants -> forced-break marker
@@ -172,14 +200,11 @@ def parse_inline(s):
             runs.append((m.group("code"), "mono"))
         elif m.group("ltext") is not None:
             runs.append((m.group("ltext"), "link"))
-        elif m.group("b1") is not None:
-            runs.append((m.group("b1"), "bold"))
-        elif m.group("b2") is not None:
-            runs.append((m.group("b2"), "bold"))
-        elif m.group("i1") is not None:
-            runs.append((m.group("i1"), "ital"))
-        elif m.group("i2") is not None:
-            runs.append((m.group("i2"), "ital"))
+        else:
+            # bold / italic: parse the inside too, so `code` and links in it keep their style
+            inner = next(g for g in ("b1", "b2", "i1", "i2") if m.group(g) is not None)
+            wrap = _IN_BOLD if inner[0] == "b" else _IN_ITAL
+            runs.extend((t, wrap.get(st, st)) for t, st in parse_inline(m.group(inner)))
         pos = m.end()
     if pos < len(s):
         runs.append((s[pos:], "reg"))
@@ -238,16 +263,7 @@ def draw_flow(runs, x_left, max_w, size, leading, color, first_indent=0.0):
     def flush():
         global y
         need(leading)
-        xx = x_left + indent
-        for wi, word in enumerate(line):
-            if wi > 0:
-                xx += space_w
-            for frag, st in word:
-                fw = text_w(frag, st, size)
-                if st == "mono":
-                    fillrect(xx - 1.0, y - 2.5, fw + 2.0, size + 1.5, CODE_BG)
-                show(xx, y, frag, st, size, frag_color(st, color))
-                xx += fw
+        draw_words(line, x_left + indent, y - baseline_off(size, leading), size, color)
         y -= leading
 
     for word in words:
@@ -361,7 +377,8 @@ def render_table(headers, rows):
     keeps inline styles (bold, italic, code, links) and honors <br> line breaks."""
     global y
     ncol = len(headers) if headers else max((len(r[1]) for r in rows if r[0] == "data"), default=1)
-    size = 9.5; padx = 7.0; base = 17.0; lh = 12.0
+    size = 9.5; padx = 7.0; pady = 4.0; lh = 12.0
+    off = pady + baseline_off(size, lh)     # row top -> first baseline
     headers = [[w if w is BREAK else [(f, _BOLDER.get(st, st)) for f, st in w] for w in c]
                for c in headers]
     widths = column_widths(([headers] if headers else []) + [r[1] for r in rows if r[0] == "data"],
@@ -377,17 +394,17 @@ def render_table(headers, rows):
                 for i in range(ncol)]
 
     def row_height(cells):
-        return base + (max(len(c) for c in wrap_row(cells)) - 1) * lh
+        return 2 * pady + max(len(c) for c in wrap_row(cells)) * lh
 
     def draw_cells(cells, bold=False, bg=None):
         global y
         wrapped = wrap_row(cells)
-        rh = base + (max(len(c) for c in wrapped) - 1) * lh
+        rh = 2 * pady + max(len(c) for c in wrapped) * lh
         if bg:
-            fillrect(x0, y - rh + 4, total, rh, bg)
+            fillrect(x0, y - rh, total, rh, bg)
         for i in range(ncol):
-            strokerect(x0 + offs[i], y - rh + 4, widths[i], rh, TBORDER)
-            yy = y - 8
+            strokerect(x0 + offs[i], y - rh, widths[i], rh, TBORDER)
+            yy = y - off
             for line in wrapped[i]:
                 draw_words(line, x0 + offs[i] + padx, yy, size, HEAD if bold else BODY)
                 yy -= lh
@@ -398,12 +415,13 @@ def render_table(headers, rows):
         draw_cells(headers, bold=True, bg=THEAD_BG)
     for r in rows:
         if r[0] == "span":
-            if need(base) and headers:
+            rh = 2 * pady + lh
+            if need(rh) and headers:
                 draw_cells(headers, bold=True, bg=THEAD_BG)
-            strokerect(x0, y - base + 4, total, base, TBORDER)
+            strokerect(x0, y - rh, total, rh, TBORDER)
             tw = text_w(r[1], "ital", size)
-            show(x0 + (total - tw) / 2.0, y - base + 9, r[1], "ital", size, MUTED)
-            y -= base
+            show(x0 + (total - tw) / 2.0, y - off, r[1], "ital", size, MUTED)
+            y -= rh
         else:
             if need(row_height(r[1])) and headers:
                 draw_cells(headers, bold=True, bg=THEAD_BG)
@@ -413,23 +431,30 @@ def render_table(headers, rows):
 def draw_code_block(code_lines):
     global y
     size = 9.5; lh = 13.0; padx = 8.0; pady = 7.0
+    code_lines = [ln.expandtabs(4).rstrip() for ln in code_lines]
+    # Shrink the font so the longest line fits in the box (down to 7.5 pt), then wrap the rest.
+    longest = max((len(ln) for ln in code_lines), default=0)
+    fit = (CW - 2 * padx) / (0.6 * max(1, longest))        # Courier is 600/1000 em wide
+    if fit < size:
+        size = max(7.5, fit)
+        lh = size * 13.0 / 9.5
+    per_line = max(1, int((CW - 2 * padx) / (0.6 * size) + FIT_EPS))
+    code_lines = [ln[k:k + per_line] for ln in code_lines
+                  for k in range(0, max(1, len(ln)), per_line)]
     bh = pady * 2 + lh * max(1, len(code_lines))
     need(bh)
     fillrect(ML, y - bh, CW, bh, CODE_BG)
     strokerect(ML, y - bh, CW, bh, (0.90, 0.91, 0.93), 0.6)
-    yy = y - pady - lh + 3.5
+    yy = y - pady - baseline_off(size, lh)
     for ln in code_lines:
         show(ML + padx, yy, ln, "mono", size, CODE_TX)
         yy -= lh
-    y -= bh + 6
+    y -= bh
 
 def draw_blockquote(text):
-    global y
     y0 = y
     draw_flow(parse_inline(text), ML + 16, CW - 16, 10.5, 15.5, MUTED)
-    y1 = y
-    fillrect(ML + 2, y1 + 2, 3.0, (y0 - y1), BAR)
-    y -= 6
+    fillrect(ML + 2, y, 3.0, y0 - y, BAR)
 
 def strip_tags(s):
     return re.sub(r"<[^>]+>", "", s)
@@ -462,6 +487,60 @@ def is_delim_row(s):
         return False
     return all(re.match(r"^:?-+:?$", c) for c in cells)
 
+_LIST_RE = re.compile(r"^(\s*)([-*+]|\d+\.)\s+(.*)$")
+
+def render_list(lines, i):
+    """Draw the list that starts at lines[i] and return the index after it. A deeper
+    indent starts a nested list. An indented line with no marker continues the item."""
+    global y
+    items = []                      # [indent, marker, text]
+    first_ordered = None
+    while i < len(lines):
+        raw = lines[i].expandtabs(4)
+        m = _LIST_RE.match(raw)
+        if m:
+            indent, marker = len(m.group(1)), m.group(2)
+            ordered = marker[0].isdigit()
+            # a top-level item of the other kind (1. vs -) starts a new list
+            if items and indent <= items[0][0] and ordered != first_ordered:
+                break
+            if not items:
+                first_ordered = ordered
+            items.append([indent, marker, m.group(3).strip()])
+        elif (items and raw.strip() and raw[:1].isspace()
+              and not raw.strip().startswith(("```", "~~~", ">", "|", "<table"))):
+            items[-1][2] += " " + raw.strip()
+        else:
+            break
+        i += 1
+
+    block_start(GAP)
+    size, lead = 10.5, 15.5
+    stack = []                      # indents of the open levels
+    xs = [ML]                       # left edge of each level
+    for k, (indent, marker, text) in enumerate(items):
+        while stack and indent < stack[-1]:
+            stack.pop()
+        if not stack or indent > stack[-1]:
+            stack.append(indent)
+        level = len(stack) - 1
+        x = xs[min(level, len(xs) - 1)]
+        if k > 0:
+            y -= 3
+        need(lead)
+        bl = y - baseline_off(size, lead)
+        if marker[0].isdigit():
+            show(x + 4, bl, marker, "reg", size, BODY)
+            tx = x + 24
+        else:
+            disc(x + 8, bl + 3.4, 1.7, BODY, hollow=level % 2 == 1)
+            tx = x + 20
+        del xs[level + 1:]
+        xs.append(tx)               # a nested level starts under this item's text
+        draw_flow(parse_inline(text), tx, CW - (tx - ML), size, lead, BODY)
+    block_end(GAP)
+    return i
+
 def render_markdown(text):
     global y
     lines = text.replace("\r\n", "\n").replace("\r", "\n").split("\n")
@@ -483,34 +562,37 @@ def render_markdown(text):
                 code.append(lines[i])
                 i += 1
             i += 1  # closing fence
+            block_start(BOX_GAP)
             draw_code_block(code)
+            block_end(BOX_GAP)
             continue
 
         # heading
         m = re.match(r"^(#{1,6})\s+(.*)$", s)
         if m:
             level = len(m.group(1)); txt = m.group(2).rstrip("#").strip()
+            # sb/sa: space before/after. A heading sits closer to its own section.
             if level == 1:
-                size, lead, sb, sa = 19.0, 24.0, 2.0, 8.0
+                size, lead, sb, sa = 19.0, 24.0, 24.0, 10.0
             elif level == 2:
-                size, lead, sb, sa = 15.0, 20.0, 20.0, 7.0
+                size, lead, sb, sa = 15.0, 20.0, 22.0, 10.0
             else:
-                size, lead, sb, sa = 12.5, 16.0, 14.0, 4.0
-            y -= sb
+                size, lead, sb, sa = 12.5, 16.0, 18.0, 6.0
+            block_start(sb)
+            need(lead * 2)                  # keep the heading with the next line
             draw_flow(parse_inline(txt), ML, CW, size, lead, HEAD)
             if level <= 2:
-                y += 2
+                y -= 3
                 rule(ML, y, ML + CW, RULE, 0.9)
-                y -= 6
-            y -= sa
+            block_end(sa)
             i += 1
             continue
 
         # horizontal rule
         if re.match(r"^(\*\s*){3,}$", s) or re.match(r"^(-\s*){3,}$", s) or re.match(r"^(_\s*){3,}$", s):
-            y -= 8
+            block_start(20.0)
             rule(ML, y, ML + CW, RULE, 1.0)
-            y -= 12
+            block_end(20.0)
             i += 1
             continue
 
@@ -520,7 +602,9 @@ def render_markdown(text):
             while i < n and lines[i].strip().startswith(">"):
                 quote.append(re.sub(r"^\s*>\s?", "", lines[i]))
                 i += 1
+            block_start(BOX_GAP)
             draw_blockquote(" ".join(q.strip() for q in quote if q.strip()))
+            block_end(BOX_GAP)
             continue
 
         # HTML table
@@ -539,9 +623,9 @@ def render_markdown(text):
                         rows.append(("data", [cell_words(c) for c in cells]))
                 i += 1
             i += 1  # skip </table>
-            y -= 4
+            block_start(BOX_GAP)
             render_table(headers, rows)
-            y -= 6
+            block_end(BOX_GAP)
             continue
 
         # GitHub pipe table
@@ -553,33 +637,14 @@ def render_markdown(text):
                 cells = [cell_words(c) for c in lines[i].strip().strip("|").split("|")]
                 rows.append(("data", cells))
                 i += 1
-            y -= 4
+            block_start(BOX_GAP)
             render_table(headers, rows)
-            y -= 6
+            block_end(BOX_GAP)
             continue
 
-        # unordered list
-        if re.match(r"^[-*+]\s+", s):
-            while i < n and re.match(r"^[-*+]\s+", lines[i].strip()):
-                item = re.sub(r"^[-*+]\s+", "", lines[i].strip())
-                need(15.5)
-                disc(ML + 8, y + 3.4, 1.7, BODY)
-                draw_flow(parse_inline(item), ML + 20, CW - 20, 10.5, 15.5, BODY)
-                y -= 3
-                i += 1
-            y -= 6
-            continue
-
-        # ordered list
-        if re.match(r"^\d+\.\s+", s):
-            while i < n and re.match(r"^\d+\.\s+", lines[i].strip()):
-                mm = re.match(r"^(\d+)\.\s+(.*)$", lines[i].strip())
-                need(15.5)
-                show(ML + 4, y, mm.group(1) + ".", "reg", 10.5, BODY)
-                draw_flow(parse_inline(mm.group(2)), ML + 24, CW - 24, 10.5, 15.5, BODY)
-                y -= 3
-                i += 1
-            y -= 6
+        # list (unordered or ordered, nested by indent)
+        if _LIST_RE.match(raw):
+            i = render_list(lines, i)
             continue
 
         # paragraph (join consecutive plain lines)
@@ -602,8 +667,9 @@ def render_markdown(text):
                 hard = True
             para.append(c + (NUL if hard else ""))
             i += 1
+        block_start(GAP)
         draw_flow(parse_inline(" ".join(para)), ML, CW, 10.5, 15.5, BODY)
-        y -= 9
+        block_end(GAP)
 
 # ---------------------------------------------------------------- PDF writer
 def build_pdf(pages, page_w, path):
@@ -662,7 +728,7 @@ def build_pdf(pages, page_w, path):
 
 # ---------------------------------------------------------------- main
 def main():
-    global PAGE_W, CW, PAGINATE, PAGE_H, TOP, y, cur, PAGES
+    global PAGE_W, CW, PAGINATE, PAGE_H, TOP, y, gap, cur, PAGES
 
     ap = argparse.ArgumentParser(description="Convert Markdown to PDF (no dependencies).")
     ap.add_argument("input", help="input .md file")
@@ -681,8 +747,9 @@ def main():
     CW = PAGE_W - ML - MR
     PAGINATE = args.paginate
     PAGE_H = 842.0 if args.page_size == "a4" else 792.0
-    TOP = -(MT + 8.0)
+    TOP = -MT
     y = TOP
+    gap = 0.0
     cur = []
     PAGES = []
 
